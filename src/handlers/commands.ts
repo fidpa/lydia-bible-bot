@@ -1,13 +1,13 @@
 /**
  * Command handlers for Claude Telegram Bot.
  *
- * /start, /new, /stop, /status, /resume, /restart
+ * /start, /new, /stop, /status, /resume, /restart, /retry, /voice
  */
 
 import type { Context } from "grammy";
 import { getSession } from "../session";
 import { ALLOWED_USERS, RESTART_FILE } from "../config";
-import { isAuthorized } from "../security";
+import { isAuthorized, setPendingVoiceTrigger } from "../security";
 
 /**
  * /start - Show welcome message and status.
@@ -33,6 +33,7 @@ export async function handleStart(ctx: Context): Promise<void> {
       `/status - Status anzeigen\n` +
       `/resume - Letzte Sitzung fortsetzen\n` +
       `/retry - Letzte Nachricht wiederholen\n` +
+      `/voice - Sprachnachricht in Gruppen aktivieren\n` +
       `/restart - Bot neu starten\n\n` +
       `<b>Tipps:</b>\n` +
       `• Mit <code>!</code> vorangestellt aktuelle Anfrage unterbrechen\n` +
@@ -261,6 +262,34 @@ export async function handleRestart(ctx: Context): Promise<void> {
 
   // Exit - launchd will restart us
   process.exit(0);
+}
+
+/**
+ * /voice - Set a pending trigger so the next voice/audio message in a group
+ * is processed without needing a reply-to-bot.
+ */
+export async function handleVoiceCommand(ctx: Context): Promise<void> {
+  const userId = ctx.from?.id;
+  const chatId = ctx.chat?.id;
+  const chatType = ctx.chat?.type;
+
+  if (!userId || !chatId) return;
+
+  if (!isAuthorized(userId, ALLOWED_USERS)) {
+    await ctx.reply("Unauthorized.");
+    return;
+  }
+
+  // In private chats, voice messages are always processed
+  if (chatType !== "group" && chatType !== "supergroup") {
+    await ctx.reply("Du kannst mir hier direkt eine Sprachnachricht senden.");
+    return;
+  }
+
+  setPendingVoiceTrigger(userId, chatId);
+  await ctx.reply("🎤 Sende jetzt deine Sprachnachricht (5min).", {
+    reply_parameters: { message_id: ctx.message!.message_id },
+  });
 }
 
 /**

@@ -95,6 +95,53 @@ class RateLimiter {
 
 export const rateLimiter = new RateLimiter();
 
+// ============== Pending Voice Triggers (for /voice command) ==============
+
+const VOICE_TRIGGER_EXPIRY_MS = 5.5 * 60 * 1000;
+
+const pendingVoiceTriggers = new Map<
+  number,
+  { chatId: number; timestamp: number }
+>();
+
+// Periodic cleanup of expired triggers (prevents memory leak from unconsumed triggers)
+setInterval(() => {
+  const now = Date.now();
+  for (const [userId, trigger] of pendingVoiceTriggers) {
+    if (now - trigger.timestamp > VOICE_TRIGGER_EXPIRY_MS) {
+      pendingVoiceTriggers.delete(userId);
+    }
+  }
+}, 60_000);
+
+/**
+ * Set a pending voice trigger for a user in a specific chat.
+ * One-shot: consumed on first matching voice message within 60s.
+ */
+export function setPendingVoiceTrigger(userId: number, chatId: number): void {
+  pendingVoiceTriggers.set(userId, { chatId, timestamp: Date.now() });
+}
+
+/**
+ * Consume a pending voice trigger. Returns true if a valid (non-expired,
+ * same-chat) trigger existed and was consumed.
+ */
+export function consumePendingVoiceTrigger(
+  userId: number,
+  chatId: number
+): boolean {
+  const trigger = pendingVoiceTriggers.get(userId);
+  if (!trigger) return false;
+
+  // Always delete — one-shot regardless of outcome
+  pendingVoiceTriggers.delete(userId);
+
+  if (trigger.chatId !== chatId) return false;
+  if (Date.now() - trigger.timestamp > VOICE_TRIGGER_EXPIRY_MS) return false;
+
+  return true;
+}
+
 // ============== Path Validation ==============
 
 export function isPathAllowed(path: string): boolean {

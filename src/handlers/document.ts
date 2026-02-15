@@ -8,7 +8,12 @@
 import type { Context } from "grammy";
 import { getSession } from "../session";
 import { ALLOWED_USERS, TEMP_DIR } from "../config";
-import { isAuthorized, rateLimiter, checkGroupFilter } from "../security";
+import {
+  isAuthorized,
+  rateLimiter,
+  checkGroupFilter,
+  consumePendingVoiceTrigger,
+} from "../security";
 import { auditLog, auditLogRateLimit, startTypingIndicator } from "../utils";
 import { StreamingState, createStatusCallback } from "./streaming";
 import { createMediaGroupBuffer, handleProcessingError } from "./media-group";
@@ -476,9 +481,15 @@ export async function handleDocument(ctx: Context): Promise<void> {
     return;
   }
 
-  // 0. Group mention filter (SEC-008)
-  const { shouldProcess } = checkGroupFilter(ctx, ctx.message?.caption);
-  if (!shouldProcess) return;
+  // 0. Group filter: check /voice trigger for audio documents, then fall back to mention/reply (SEC-008)
+  const isAudioDoc = isAudioFile(doc.file_name, doc.mime_type);
+  const voiceTriggered = isAudioDoc
+    ? consumePendingVoiceTrigger(userId, chatId)
+    : false;
+  if (!voiceTriggered) {
+    const { shouldProcess } = checkGroupFilter(ctx, ctx.message?.caption);
+    if (!shouldProcess) return;
+  }
 
   // 1. Authorization check
   if (!isAuthorized(userId, ALLOWED_USERS)) {

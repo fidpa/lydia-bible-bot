@@ -43,7 +43,6 @@ export const ALLOWED_USERS: number[] = (
   .filter((x) => !isNaN(x));
 
 export const WORKING_DIR = process.env.CLAUDE_WORKING_DIR || HOME;
-export const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 export const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-5";
 
 // ============== Claude CLI Path ==============
@@ -215,27 +214,24 @@ export const QUERY_TIMEOUT_MS = 180_000;
 
 // ============== Voice Transcription ==============
 
-const BASE_TRANSCRIPTION_PROMPT = `Transcribe this voice message accurately.
-The speaker may use multiple languages (English, and possibly others).
-Focus on accuracy for proper nouns, technical terms, and commands.`;
-
-let TRANSCRIPTION_CONTEXT = "";
-if (process.env.TRANSCRIPTION_CONTEXT_FILE) {
-  try {
-    const file = Bun.file(process.env.TRANSCRIPTION_CONTEXT_FILE);
-    if (await file.exists()) {
-      TRANSCRIPTION_CONTEXT = (await file.text()).trim();
-    }
-  } catch {
-    // File not found or unreadable — proceed without context
-  }
+// Whisper mode: "local" (whisper-cli) or "off" (disabled)
+const rawWhisperMode = (process.env.WHISPER_MODE || "local").toLowerCase();
+if (rawWhisperMode !== "local" && rawWhisperMode !== "off") {
+  console.warn(`WARNING: Unrecognized WHISPER_MODE="${rawWhisperMode}", defaulting to "local"`);
 }
+export const WHISPER_MODE: "local" | "off" = rawWhisperMode === "off" ? "off" : "local";
 
-export const TRANSCRIPTION_PROMPT = TRANSCRIPTION_CONTEXT
-  ? `${BASE_TRANSCRIPTION_PROMPT}\n\nAdditional context:\n${TRANSCRIPTION_CONTEXT}`
-  : BASE_TRANSCRIPTION_PROMPT;
+// Local whisper-cli configuration
+export const WHISPER_CLI_PATH =
+  process.env.WHISPER_CLI_PATH ||
+  Bun.which("whisper-cli") ||
+  "/opt/homebrew/bin/whisper-cli"; // macOS Apple Silicon Homebrew default
+export const WHISPER_MODEL_PATH =
+  process.env.WHISPER_MODEL_PATH ||
+  resolve(dirname(import.meta.dir), "models/ggml-german-turbo-q5_0.bin");
 
-export const TRANSCRIPTION_AVAILABLE = !!OPENAI_API_KEY;
+// Mutable — startup validation may disable if dependencies are missing
+let transcriptionAvailable = WHISPER_MODE === "local";
 
 // ============== Thinking Keywords ==============
 
@@ -295,7 +291,7 @@ export const TEMP_DIR = "/tmp/telegram-bot";
 export const TEMP_PATHS = ["/tmp/", "/private/tmp/", "/var/folders/"];
 
 // Ensure directories exist with restricted permissions
-import { mkdirSync, chmodSync } from "fs";
+import { mkdirSync, chmodSync, existsSync } from "fs";
 try {
   mkdirSync(DATA_DIR, { recursive: true });
   chmodSync(DATA_DIR, 0o700);
@@ -318,6 +314,27 @@ if (ALLOWED_USERS.length === 0) {
   process.exit(1);
 }
 
+// Validate local whisper setup
+if (WHISPER_MODE === "local") {
+  if (!existsSync(WHISPER_CLI_PATH)) {
+    console.warn(
+      `WARNING: WHISPER_MODE=local but whisper-cli not found at: ${WHISPER_CLI_PATH}\n` +
+      `  Install: brew install whisper-cpp`
+    );
+    transcriptionAvailable = false;
+  }
+
+  if (!existsSync(WHISPER_MODEL_PATH)) {
+    console.warn(
+      `WARNING: WHISPER_MODE=local but model not found at: ${WHISPER_MODEL_PATH}\n` +
+      `  Place a GGML model in the models/ directory`
+    );
+    transcriptionAvailable = false;
+  }
+}
+
+export const TRANSCRIPTION_AVAILABLE = transcriptionAvailable;
+
 console.log(
-  `Config loaded: ${ALLOWED_USERS.length} allowed users, working dir: ${WORKING_DIR}`
+  `Config loaded: ${ALLOWED_USERS.length} allowed users, working dir: ${WORKING_DIR}, whisper: ${WHISPER_MODE}`
 );

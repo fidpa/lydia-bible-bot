@@ -36,14 +36,14 @@ Bot vollstaendig ignoriert und nicht verarbeitet.
   gesendet. Anthropic verarbeitet diese gemaess ihrer
   [Datenschutzrichtlinie](https://www.anthropic.com/privacy).
   Anthropic speichert API-Anfragen nicht fuer Trainingszwecke.
-- **OpenAI (USA)** - Nur bei Sprachnachrichten: Audio wird zur Transkription
-  an OpenAI gesendet.
+- **Sprachnachrichten** - werden lokal auf dem Server des Betreibers
+  transkribiert (whisper.cpp). Audio-Daten verlassen nicht das lokale Netzwerk.
 - **Lokaler Server** - Ein Audit-Log auf dem Server des Betreibers erfasst
   Interaktionen (Telegram-ID, Zeitstempel, gekuerzter Nachrichteninhalt).
 
 ### Wie lange werden Daten gespeichert?
 
-- **Anthropic/OpenAI**: Daten werden laut deren API-Richtlinien transient
+- **Anthropic**: Daten werden laut deren API-Richtlinien transient
   verarbeitet und nicht dauerhaft gespeichert. Es gibt KEINE Moeglichkeit,
   einzelne API-Anfragen nachtraeglich zu loeschen - die Daten sind nach
   Verarbeitung nicht mehr abrufbar.
@@ -66,10 +66,12 @@ Du kannst jederzeit:
 - **Den Bot nicht nutzen** - der Bot reagiert nur auf direkte Ansprache,
   deine normalen Gruppennachrichten werden nicht verarbeitet
 
-**Wichtig:** Bereits an Anthropic/OpenAI gesendete Nachrichten koennen nicht
-nachtraeglich geloescht werden, da diese APIs Daten nicht persistent pro
-Nutzer speichern und kein Loeschmechanismus existiert. Die Daten werden
+**Wichtig:** Bereits an Anthropic gesendete Nachrichten koennen nicht
+nachtraeglich geloescht werden, da die API Daten nicht persistent pro
+Nutzer speichert und kein Loeschmechanismus existiert. Die Daten werden
 transient verarbeitet und sind danach nicht mehr zugreifbar.
+Sprachnachrichten werden ausschliesslich lokal verarbeitet und nicht
+an Drittanbieter weitergegeben.
 
 Wende dich fuer Anfragen an den Gruppenadministrator.
 
@@ -98,12 +100,12 @@ Was passiert mit euren Daten?
 - Normale Gruppennachrichten werden NICHT gelesen
 - Nachrichteninhalt wird an Anthropic (USA) gesendet und dort transient
   verarbeitet (nicht dauerhaft gespeichert)
-- Sprachnachrichten zusaetzlich an OpenAI (USA) zur Transkription
+- Sprachnachrichten werden lokal transkribiert (keine Weitergabe an Dritte)
 - Interaktionen werden im lokalen Audit-Log erfasst
 
 Was kann geloescht werden?
 - Lokales Audit-Log und Session-Daten: Ja, auf Anfrage beim Gruppenadmin
-- Bereits an Anthropic/OpenAI gesendete Daten: Nein - diese werden transient
+- Bereits an Anthropic gesendete Daten: Nein - diese werden transient
   verarbeitet und sind danach nicht mehr zugreifbar
 
 Nutzung ist freiwillig. Ihr koennt die Gruppe nutzen, ohne den Bot
