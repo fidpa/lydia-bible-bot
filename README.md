@@ -8,7 +8,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained-yes-brightgreen.svg)](https://github.com/fidpa/lydia-bible-bot/commits/)
 ![Last Commit](https://img.shields.io/github/last-commit/fidpa/lydia-bible-bot)
 
-Security-hardened AI Bible study assistant for Telegram groups, built on [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot). Uses Claude (Anthropic) for theological discussion, with OpenAI for voice transcription.
+Security-hardened AI Bible study assistant for Telegram groups, built on [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot). Uses Claude (Anthropic) for theological discussion, with local voice transcription via whisper.cpp.
 
 **The Problem**: Running an AI assistant in a Telegram group requires more than just connecting an API. The upstream project provides an excellent foundation for controlling Claude Code via Telegram, but deploying it for a group of users demands systematic security hardening: rate limiting, path validation, command safety checks, prompt injection defenses, and audit logging. After conducting a full security audit and implementing 13 hardening measures, this repository documents the entire process transparently, including the limitations that remain.
 
@@ -17,7 +17,7 @@ Security-hardened AI Bible study assistant for Telegram groups, built on [linuz9
 - **Security-First** - 13 hardening measures from a documented security audit (see [Security](#security))
 - **Bible Study Focus** - Theological system prompt with citation guidelines, multi-tradition awareness, and copyright-compliant Bible quoting (Schlachter 2000, Elberfelder, Luther 2017)
 - **Group Chat Aware** - Only responds when @mentioned or replied to, keeps responses concise in groups
-- **Multi-Modal Input** - Text, voice messages (OpenAI transcription), photos, documents (PDF extraction), video
+- **Multi-Modal Input** - Text, voice messages (local whisper.cpp transcription), photos, documents (PDF extraction), video
 - **Streaming Responses** - Live message updates as Claude generates, with tool status indicators
 - **Session Management** - Per-chat sessions with persistence, `/new`, `/stop`, `/resume` commands
 - **MCP Integration** - Extensible via Model Context Protocol servers (ask-user inline keyboard, custom tools)
@@ -41,7 +41,8 @@ Security-hardened AI Bible study assistant for Telegram groups, built on [linuz9
 - [Bun](https://bun.sh/) 1.1+
 - Telegram bot token from [@BotFather](https://t.me/BotFather)
 - Claude Code CLI installed and authenticated (or Anthropic API key)
-- Optional: OpenAI API key for voice transcription
+- Optional: `whisper-cpp` for voice transcription (`brew install whisper-cpp`) + GGML model
+- Optional: `ffmpeg` for voice message conversion (`brew install ffmpeg`)
 - Optional: `poppler` for PDF extraction (`brew install poppler`)
 
 ### Setup
@@ -72,6 +73,7 @@ bun run start
 | `/resume` | Resume previous conversation |
 | `/restart` | Restart the bot process |
 | `/retry` | Retry the last failed message |
+| `/voice` | Activate voice processing in groups (5min window) |
 
 ## Configuration
 
@@ -82,7 +84,8 @@ All configuration via environment variables (see [.env.example](.env.example)):
 | `TELEGRAM_BOT_TOKEN` | Yes | Bot token from @BotFather |
 | `TELEGRAM_ALLOWED_USERS` | Yes | Comma-separated Telegram user IDs |
 | `CLAUDE_WORKING_DIR` | Recommended | Working directory for Claude (loads CLAUDE.md) |
-| `OPENAI_API_KEY` | Optional | Enables voice message transcription |
+| `WHISPER_MODE` | Optional | `local` (default) or `off` — voice transcription mode |
+| `WHISPER_MODEL_PATH` | Optional | Path to GGML whisper model (default: `models/ggml-*.bin`) |
 | `ALLOWED_PATHS` | Optional | Directories Claude can access (default: working dir, ~/Documents, ~/Downloads, ~/Desktop) |
 | `RATE_LIMIT_REQUESTS` | Optional | Requests per window (default: 20) |
 | `RATE_LIMIT_WINDOW` | Optional | Window in seconds (default: 60) |
@@ -127,7 +130,7 @@ lydia-bible-bot/
 │   ├── types.ts           # Shared TypeScript types
 │   └── handlers/
 │       ├── text.ts        # Text messages with group mention filtering
-│       ├── voice.ts       # Voice → OpenAI transcription → Claude
+│       ├── voice.ts       # Voice → local whisper-cli transcription → Claude
 │       ├── photo.ts       # Image analysis with media group buffering
 │       ├── document.ts    # PDF extraction, text files, archives
 │       ├── audio.ts       # Audio file transcription
@@ -159,7 +162,7 @@ Telegram → grammY handler → Auth check → Group filter → Rate limit
 | Runtime | [Bun](https://bun.sh/) |
 | Language | TypeScript 5 (strict mode) |
 | AI Backend | [Claude Agent SDK](https://docs.anthropic.com/en/docs/build-with-claude/agent-sdk) |
-| Voice Transcription | [OpenAI Whisper API](https://platform.openai.com/docs/guides/speech-to-text) |
+| Voice Transcription | [whisper.cpp](https://github.com/ggerganov/whisper.cpp) (local, GGML model) |
 | Telegram Library | [grammY](https://grammy.dev/) |
 | Tool Integration | [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) |
 | Validation | [Zod](https://zod.dev/) |

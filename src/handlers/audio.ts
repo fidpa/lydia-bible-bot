@@ -2,14 +2,19 @@
  * Audio handler for Claude Telegram Bot.
  *
  * Handles native Telegram audio messages and audio files sent as documents.
- * Transcribes using OpenAI (same as voice messages) then processes with Claude.
+ * Transcribes using local whisper-cli, then processes with Claude.
  */
 
 import type { Context } from "grammy";
 import { unlinkSync } from "fs";
 import { getSession } from "../session";
 import { ALLOWED_USERS, TEMP_DIR, TRANSCRIPTION_AVAILABLE } from "../config";
-import { isAuthorized, rateLimiter, checkGroupFilter } from "../security";
+import {
+  isAuthorized,
+  rateLimiter,
+  checkGroupFilter,
+  consumePendingVoiceTrigger,
+} from "../security";
 import {
   auditLog,
   auditLogRateLimit,
@@ -57,7 +62,7 @@ export async function processAudioFile(
 ): Promise<void> {
   if (!TRANSCRIPTION_AVAILABLE) {
     await ctx.reply(
-      "Voice transcription is not configured. Set OPENAI_API_KEY in .env"
+      "Voice transcription is not configured. Set WHISPER_MODE in .env"
     );
     return;
   }
@@ -160,9 +165,12 @@ export async function handleAudio(ctx: Context): Promise<void> {
     return;
   }
 
-  // 0. Group mention filter (SEC-008)
-  const { shouldProcess } = checkGroupFilter(ctx, ctx.message?.caption);
-  if (!shouldProcess) return;
+  // 0. Group filter: check /voice trigger first, then fall back to mention/reply (SEC-008)
+  const voiceTriggered = consumePendingVoiceTrigger(userId, chatId);
+  if (!voiceTriggered) {
+    const { shouldProcess } = checkGroupFilter(ctx, ctx.message?.caption);
+    if (!shouldProcess) return;
+  }
 
   // 1. Authorization check
   if (!isAuthorized(userId, ALLOWED_USERS)) {
@@ -187,8 +195,10 @@ export async function handleAudio(ctx: Context): Promise<void> {
   try {
     const file = await ctx.getFile();
     const timestamp = Date.now();
-    const ext = audio.file_name?.split(".").pop() || "mp3";
-    audioPath = `${TEMP_DIR}/audio_${timestamp}.${ext}`;
+    const rawExt = audio.file_name?.split(".").pop() || "mp3";
+    const ext = rawExt.replace(/[^a-zA-Z0-9]/g, "").slice(0, 10) || "mp3";
+    const random = crypto.randomUUID().slice(0, 8);
+    audioPath = `${TEMP_DIR}/audio_${timestamp}_${random}.${ext}`;
 
     const response = await fetch(
       `https://api.telegram.org/file/bot${ctx.api.token}/${file.file_path}`

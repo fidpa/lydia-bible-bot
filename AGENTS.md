@@ -28,7 +28,7 @@ Telegram message → Handler → Auth check → Rate limit → Claude session �
 - **`src/session.ts`** - `ClaudeSession` class wrapping Agent SDK V2 with streaming, session persistence (`/tmp/claude-telegram-session.json`), and defense-in-depth safety checks
 - **`src/security.ts`** - `RateLimiter` (token bucket), path validation, command safety checks
 - **`src/formatting.ts`** - Markdown→HTML conversion for Telegram, tool status emoji formatting
-- **`src/utils.ts`** - Audit logging, voice transcription (OpenAI), typing indicators
+- **`src/utils.ts`** - Audit logging, voice transcription (local whisper-cli), typing indicators
 - **`src/types.ts`** - Shared TypeScript types
 
 ### Handlers (`src/handlers/`)
@@ -36,8 +36,8 @@ Telegram message → Handler → Auth check → Rate limit → Claude session �
 Each message type has a dedicated async handler:
 - **`commands.ts`** - `/start`, `/new`, `/stop`, `/status`, `/resume`, `/restart`, `/retry`
 - **`text.ts`** - Text messages with intent filtering
-- **`voice.ts`** - Voice→text via OpenAI, then same flow as text
-- **`audio.ts`** - Audio file transcription via OpenAI (mp3, m4a, ogg, wav, etc.), also handles audio sent as documents
+- **`voice.ts`** - Voice→text via local whisper-cli, then same flow as text
+- **`audio.ts`** - Audio file transcription via local whisper-cli (mp3, m4a, ogg, wav, etc.), also handles audio sent as documents
 - **`photo.ts`** - Image analysis with media group buffering (1s timeout for albums)
 - **`document.ts`** - PDF extraction (pdftotext CLI), text files, archives, routes audio files to `audio.ts`
 - **`video.ts`** - Video messages and video notes
@@ -59,7 +59,7 @@ All config via `.env` (copy from `.env.example`). Key variables:
 - `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALLOWED_USERS` (required)
 - `CLAUDE_WORKING_DIR` - Working directory for Claude
 - `ALLOWED_PATHS` - Directories Claude can access
-- `OPENAI_API_KEY` - For voice transcription
+- `WHISPER_MODE` - Voice transcription mode (`local` or `off`)
 
 MCP servers defined in `mcp-config.ts`.
 

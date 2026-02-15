@@ -3,7 +3,6 @@
   "module": "src/index.ts",
   "type": "module",
   "private": true,
-  "license": "MIT",
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch run src/index.ts",
@@ -20,7 +19,6 @@
     "@grammyjs/runner": "^2.0.3",
     "@modelcontextprotocol/sdk": "^1.25.1",
     "grammy": "^1.38.4",
-    "openai": "^6.15.0",
     "zod": "^4.2.1"
   }
 }

@@ -6,7 +6,12 @@ import type { Context } from "grammy";
 import { unlinkSync } from "fs";
 import { getSession } from "../session";
 import { ALLOWED_USERS, TEMP_DIR, TRANSCRIPTION_AVAILABLE } from "../config";
-import { isAuthorized, rateLimiter, checkGroupFilter } from "../security";
+import {
+  isAuthorized,
+  rateLimiter,
+  checkGroupFilter,
+  consumePendingVoiceTrigger,
+} from "../security";
 import {
   auditLog,
   auditLogRateLimit,
@@ -28,9 +33,12 @@ export async function handleVoice(ctx: Context): Promise<void> {
     return;
   }
 
-  // 0. Group mention filter: voice has no text — only reply-to-bot triggers (SEC-008)
-  const { shouldProcess } = checkGroupFilter(ctx);
-  if (!shouldProcess) return;
+  // 0. Group filter: check /voice trigger first, then fall back to reply-to-bot (SEC-008)
+  const voiceTriggered = consumePendingVoiceTrigger(userId, chatId);
+  if (!voiceTriggered) {
+    const { shouldProcess } = checkGroupFilter(ctx);
+    if (!shouldProcess) return;
+  }
 
   // 1. Authorization check
   if (!isAuthorized(userId, ALLOWED_USERS)) {
@@ -41,7 +49,7 @@ export async function handleVoice(ctx: Context): Promise<void> {
   // 2. Check if transcription is available
   if (!TRANSCRIPTION_AVAILABLE) {
     await ctx.reply(
-      "Voice transcription is not configured. Set OPENAI_API_KEY in .env"
+      "Voice transcription is not configured. Set WHISPER_MODE in .env"
     );
     return;
   }
@@ -70,7 +78,8 @@ export async function handleVoice(ctx: Context): Promise<void> {
     // 6. Download voice file
     const file = await ctx.getFile();
     const timestamp = Date.now();
-    voicePath = `${TEMP_DIR}/voice_${timestamp}.ogg`;
+    const random = crypto.randomUUID().slice(0, 8);
+    voicePath = `${TEMP_DIR}/voice_${timestamp}_${random}.ogg`;
 
     // Download the file
     const downloadRes = await fetch(
