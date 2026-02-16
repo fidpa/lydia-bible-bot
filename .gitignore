@@ -46,6 +46,9 @@ mcp-config.ts
 # Whisper model files (large binaries)
 models/
 
+# Bible database (copyrighted content, local only - see bible_mcp/download.ts)
+bible_mcp/data/
+
 # Personal/marketing
 LINKEDIN_POST.md
 REDDIT_POST.md

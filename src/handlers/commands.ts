@@ -37,7 +37,7 @@ export async function handleStart(ctx: Context): Promise<void> {
       `/restart - Bot neu starten\n\n` +
       `<b>Tipps:</b>\n` +
       `• Mit <code>!</code> vorangestellt aktuelle Anfrage unterbrechen\n` +
-      `• "think" fuer ausfuehrliches Nachdenken\n` +
+      `• "think" für ausführliches Nachdenken\n` +
       `• Fotos, Sprachnachrichten oder Dokumente senden`,
     { parse_mode: "HTML" }
   );
@@ -68,7 +68,7 @@ export async function handleNew(ctx: Context): Promise<void> {
   // Clear session
   await session.kill();
 
-  await ctx.reply("🆕 Sitzung beendet. Die naechste Nachricht startet eine neue Sitzung.");
+  await ctx.reply("🆕 Sitzung beendet. Die nächste Nachricht startet eine neue Sitzung.");
 }
 
 /**
@@ -182,7 +182,7 @@ export async function handleResume(ctx: Context): Promise<void> {
   const session = getSession(userId!);
 
   if (session.isActive) {
-    await ctx.reply("Sitzung bereits aktiv. Nutze /new fuer eine neue Sitzung.");
+    await ctx.reply("Sitzung bereits aktiv. Nutze /new für eine neue Sitzung.");
     return;
   }
 
@@ -219,7 +219,7 @@ export async function handleResume(ctx: Context): Promise<void> {
     ];
   });
 
-  await ctx.reply("📋 <b>Gespeicherte Sitzungen</b>\n\nWaehle eine Sitzung zum Fortsetzen:", {
+  await ctx.reply("📋 <b>Gespeicherte Sitzungen</b>\n\nWähle eine Sitzung zum Fortsetzen:", {
     parse_mode: "HTML",
     reply_markup: {
       inline_keyboard: buttons,
@@ -313,7 +313,7 @@ export async function handleRetry(ctx: Context): Promise<void> {
 
   // Check if something is already running
   if (session.isRunning) {
-    await ctx.reply("⏳ Anfrage laeuft noch. Nutze /stop zuerst.");
+    await ctx.reply("⏳ Anfrage läuft noch. Nutze /stop zuerst.");
     return;
   }
 

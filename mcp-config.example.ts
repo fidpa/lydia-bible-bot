@@ -19,6 +19,13 @@ export const MCP_SERVERS: Record<
   | { command: string; args?: string[]; env?: Record<string, string> }
   | { type: "http"; url: string; headers?: Record<string, string> }
 > = {
+  // Bible - exact verse lookups from local SQLite (Schlachter 2000)
+  // Setup: bun run bible_mcp/download.ts (one-time)
+  "bible": {
+    command: "bun",
+    args: ["run", `${REPO_ROOT}/bible_mcp/server.ts`],
+  },
+
   // Ask User - present options as Telegram inline keyboard buttons
   // Uncomment to enable interactive button prompts
   // "ask-user": {

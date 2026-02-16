@@ -175,7 +175,7 @@ async function handleResumeCallback(
   const sessionId = callbackData.replace("resume:", "");
 
   if (!sessionId || !userId || !chatId) {
-    await ctx.answerCallbackQuery({ text: "Ungueltige Sitzungs-ID" });
+    await ctx.answerCallbackQuery({ text: "Ungültige Sitzungs-ID" });
     return;
   }
 

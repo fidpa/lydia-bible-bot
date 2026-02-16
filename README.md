@@ -20,7 +20,8 @@ Security-hardened AI Bible study assistant for Telegram groups, built on [linuz9
 - **Multi-Modal Input** - Text, voice messages (local whisper.cpp transcription), photos, documents (PDF extraction), video
 - **Streaming Responses** - Live message updates as Claude generates, with tool status indicators
 - **Session Management** - Per-chat sessions with persistence, `/new`, `/stop`, `/resume` commands
-- **MCP Integration** - Extensible via Model Context Protocol servers (ask-user inline keyboard, custom tools)
+- **Exact Bible Quotes** - Local MCP server with SQLite database for precise verse lookups (Schlachter 2000), never quotes from memory
+- **MCP Integration** - Extensible via Model Context Protocol servers (Bible lookup, ask-user inline keyboard, custom tools)
 - **GDPR Documentation** - Privacy notice for German Telegram groups (see [docs/datenschutz.md](docs/datenschutz.md))
 - **EU AI Act Compliance** - Mandatory AI transparency disclosure in system prompt
 
@@ -57,6 +58,12 @@ bun install
 # Configure environment
 cp .env.example .env
 # Edit .env with your tokens and user IDs
+
+# Download Bible database (one-time, ~5 MB)
+bun run bible_mcp/download.ts
+
+# Configure MCP servers
+cp mcp-config.example.ts mcp-config.ts
 
 # Run
 bun run start
@@ -139,6 +146,10 @@ lydia-bible-bot/
 │       ├── streaming.ts   # Shared streaming state and status callbacks
 │       ├── commands.ts    # Bot command handlers
 │       └── index.ts       # Handler exports
+├── bible_mcp/             # MCP server for exact Bible verse lookups (SQLite)
+│   ├── server.ts          # bible_lookup tool via MCP
+│   ├── download.ts        # One-time Schlachter 2000 download from bolls.life
+│   └── aliases.ts         # German book name aliases (Jesaja→23, 1Mo→1, etc.)
 ├── ask_user_mcp/          # MCP server for interactive Telegram buttons
 ├── docs/
 │   ├── security-limitations.md  # Architectural security analysis

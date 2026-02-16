@@ -63,6 +63,17 @@ All config via `.env` (copy from `.env.example`). Key variables:
 
 MCP servers defined in `mcp-config.ts`.
 
+### Bible MCP Server (`bible_mcp/`)
+
+Local MCP server providing exact Bible verse lookups from SQLite.
+
+- **`bible_mcp/server.ts`** - MCP server with `bible_lookup` tool
+- **`bible_mcp/download.ts`** - One-time download: fetches Schlachter 2000 from bolls.life → SQLite
+- **`bible_mcp/aliases.ts`** - German book name aliases (Jesaja→23, 1. Mose→1, Röm→45, etc.)
+- **`bible_mcp/data/bible.db`** - SQLite database (~31k verses, ~5 MB, gitignored)
+
+Setup: `bun run bible_mcp/download.ts` (one-time), then add `"bible"` server to `mcp-config.ts`.
+
 ### Runtime Files
 
 - `~/.lydia-bibel-bot/sessions.json` - Session persistence for `/resume`
