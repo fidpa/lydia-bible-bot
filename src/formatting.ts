@@ -16,6 +16,139 @@ export function escapeHtml(text: string): string {
 }
 
 /**
+ * Strip markdown formatting markers from text.
+ */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, "$1")
+    .replace(/(?<!\*)\*(.+?)\*(?!\*)/g, "$1")
+    .replace(/__(.+?)__/g, "$1")
+    .replace(/(?<!_)_(.+?)_(?!_)/g, "$1")
+    .replace(/`(.+?)`/g, "$1");
+}
+
+/**
+ * Convert inline markdown (bold/italic) to Telegram HTML.
+ */
+function inlineToHtml(text: string): string {
+  // Use control chars as temporary tag placeholders (survive escapeHtml)
+  let result = text.replace(/\*\*(.+?)\*\*/g, "\x01b\x02$1\x01/b\x02");
+  result = result.replace(/(?<!\*)\*(.+?)\*(?!\*)/g, "\x01i\x02$1\x01/i\x02");
+  result = escapeHtml(result);
+  return result.replace(/\x01/g, "<").replace(/\x02/g, ">");
+}
+
+// Max total column width for <pre> table layout (wider → card layout)
+// Telegram mobile chat bubbles fit ~35 monospace chars. Only use <pre>
+// for tables that genuinely fit without wrapping.
+const MAX_PRE_TABLE_WIDTH = 35;
+
+/**
+ * Convert markdown table lines to Telegram-compatible HTML.
+ *
+ * Narrow tables → aligned <pre> block (stripped markdown).
+ * Wide tables → vertical card layout with inline bold/italic.
+ */
+function formatMarkdownTable(lines: string[]): string {
+  const rawRows: string[][] = [];
+  let hasHeader = false;
+
+  for (const line of lines) {
+    const cells = line
+      .split("|")
+      .slice(1, -1)
+      .map((c) => c.trim());
+
+    if (cells.every((c) => /^[-:]+$/.test(c))) {
+      hasHeader = true;
+      continue;
+    }
+
+    rawRows.push(cells);
+  }
+
+  if (rawRows.length === 0) return "";
+
+  const colCount = Math.max(...rawRows.map((r) => r.length));
+
+  // Strip markdown for width calculation
+  const strippedRows = rawRows.map((row) =>
+    row.map((cell) => stripMarkdown(cell))
+  );
+
+  const colWidths: number[] = Array.from({ length: colCount }, () => 0);
+  for (const row of strippedRows) {
+    for (let i = 0; i < colCount; i++) {
+      colWidths[i] = Math.max(colWidths[i]!, (row[i] || "").length);
+    }
+  }
+
+  const totalWidth =
+    colWidths.reduce((a, b) => a + b, 0) + (colCount - 1) * 2;
+
+  // ── Layout decision ──
+  // Narrow tables (≤ 35 chars): <pre> aligned — fits on mobile without wrapping.
+  // Wide tables: card layout — wraps naturally with bold/italic formatting.
+  // Telegram <pre> WRAPS text (no horizontal scroll), so wide <pre> is unusable.
+  const usePreLayout = totalWidth <= MAX_PRE_TABLE_WIDTH;
+
+  if (usePreLayout) {
+    const output: string[] = [];
+    for (let r = 0; r < strippedRows.length; r++) {
+      const row = strippedRows[r]!;
+      const cells: string[] = [];
+      for (let i = 0; i < colCount; i++) {
+        cells.push((row[i] || "").padEnd(colWidths[i]!));
+      }
+      output.push(cells.join("  "));
+
+      if (hasHeader && r === 0) {
+        output.push(colWidths.map((w) => "\u2500".repeat(w)).join("  "));
+      }
+    }
+    return "<pre>" + escapeHtml(output.join("\n")) + "</pre>";
+  }
+
+  // ── Wide table → card layout (wraps naturally on all screens) ──
+  const headerLabels = hasHeader ? rawRows[0]! : [];
+  const dataRows = hasHeader ? rawRows.slice(1) : rawRows;
+
+  // 2 columns → bold heading + content on next line
+  if (colCount === 2) {
+    const cards: string[] = [];
+    for (const row of dataRows) {
+      const heading = escapeHtml(stripMarkdown(row[0] || ""));
+      const value = inlineToHtml(row[1] || "");
+      cards.push(`<b>${heading}</b>\n${value}`);
+    }
+    return cards.join("\n\n");
+  }
+
+  // 3+ columns → bold heading + labeled fields
+  const cards: string[] = [];
+  for (const row of dataRows) {
+    const cardLines: string[] = [];
+
+    cardLines.push(`<b>${escapeHtml(stripMarkdown(row[0] || ""))}</b>`);
+
+    for (let i = 1; i < colCount; i++) {
+      const value = inlineToHtml(row[i] || "");
+      const label = stripMarkdown(headerLabels[i] || "");
+
+      if (label) {
+        cardLines.push(`${escapeHtml(label)}: ${value}`);
+      } else {
+        cardLines.push(value);
+      }
+    }
+
+    cards.push(cardLines.join("\n"));
+  }
+
+  return cards.join("\n\n");
+}
+
+/**
  * Convert standard markdown to Telegram-compatible HTML.
  *
  * HTML is more reliable than Telegram's Markdown which breaks on special chars.
@@ -31,6 +164,42 @@ export function convertMarkdownToHtml(text: string): string {
     codeBlocks.push(code);
     return `\x00CODEBLOCK${codeBlocks.length - 1}\x00`;
   });
+
+  // Save markdown tables (consecutive | lines → aligned <pre>)
+  const tables: string[] = [];
+  {
+    const allLines = text.split("\n");
+    const result: string[] = [];
+    const tableLines: string[] = [];
+
+    for (const line of allLines) {
+      const trimmed = line.trim();
+      const isTableLine =
+        trimmed.startsWith("|") && trimmed.endsWith("|") && trimmed.length > 1;
+
+      if (isTableLine) {
+        tableLines.push(trimmed);
+      } else {
+        if (tableLines.length >= 2) {
+          tables.push(formatMarkdownTable(tableLines));
+          result.push(`\x00TABLE${tables.length - 1}\x00`);
+        } else if (tableLines.length > 0) {
+          result.push(...tableLines);
+        }
+        tableLines.length = 0;
+        result.push(line);
+      }
+    }
+
+    if (tableLines.length >= 2) {
+      tables.push(formatMarkdownTable(tableLines));
+      result.push(`\x00TABLE${tables.length - 1}\x00`);
+    } else if (tableLines.length > 0) {
+      result.push(...tableLines);
+    }
+
+    text = result.join("\n");
+  }
 
   // Save inline code (`code`)
   text = text.replace(/`([^`]+)`/g, (_, code) => {
@@ -81,6 +250,11 @@ export function convertMarkdownToHtml(text: string): string {
       `\x00INLINECODE${i}\x00`,
       `<code>${escapedCode}</code>`
     );
+  }
+
+  // Restore tables
+  for (let i = 0; i < tables.length; i++) {
+    text = text.replace(`\x00TABLE${i}\x00`, tables[i]!);
   }
 
   // Collapse multiple newlines
