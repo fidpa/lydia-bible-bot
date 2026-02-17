@@ -15,8 +15,8 @@ import { createMediaGroupBuffer, handleProcessingError } from "./media-group";
 // Create photo-specific media group buffer
 const photoBuffer = createMediaGroupBuffer({
   emoji: "📷",
-  itemLabel: "photo",
-  itemLabelPlural: "photos",
+  itemLabel: "Foto",
+  itemLabelPlural: "Fotos",
 });
 
 /**
@@ -139,13 +139,13 @@ export async function handlePhoto(ctx: Context): Promise<void> {
     if (!allowed) {
       await auditLogRateLimit(userId, username, retryAfter!);
       await ctx.reply(
-        `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+        `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
       );
       return;
     }
 
     // Show status immediately
-    statusMsg = await ctx.reply("📷 Processing image...");
+    statusMsg = await ctx.reply("📷 Schaue mir das Bild an...");
   }
 
   // 3. Download photo
@@ -159,14 +159,14 @@ export async function handlePhoto(ctx: Context): Promise<void> {
         await ctx.api.editMessageText(
           statusMsg.chat.id,
           statusMsg.message_id,
-          "❌ Failed to download photo."
+          "❌ Das Bild konnte leider nicht geladen werden."
         );
       } catch (editError) {
         console.debug("Failed to edit status message:", editError);
-        await ctx.reply("❌ Failed to download photo.");
+        await ctx.reply("❌ Das Bild konnte leider nicht geladen werden.");
       }
     } else {
-      await ctx.reply("❌ Failed to download photo.");
+      await ctx.reply("❌ Das Bild konnte leider nicht geladen werden.");
     }
     return;
   }

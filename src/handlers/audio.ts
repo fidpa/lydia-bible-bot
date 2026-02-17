@@ -73,14 +73,14 @@ export async function processAudioFile(
 
   try {
     // Transcribe
-    const statusMsg = await ctx.reply("🎤 Transcribing audio...");
+    const statusMsg = await ctx.reply("🎤 Höre zu...");
 
     const transcript = await transcribeVoice(filePath);
     if (!transcript) {
       await ctx.api.editMessageText(
         chatId,
         statusMsg.message_id,
-        "❌ Transcription failed."
+        "❌ Ich konnte die Aufnahme leider nicht verstehen."
       );
       return;
     }
@@ -133,7 +133,7 @@ export async function processAudioFile(
     if (String(error).includes("abort") || String(error).includes("cancel")) {
       const wasInterrupt = session.consumeInterruptFlag();
       if (!wasInterrupt) {
-        await ctx.reply("🛑 Query stopped.");
+        await ctx.reply("🛑 Abgebrochen.");
       }
     } else {
       console.error("Audio handler error:", error);
@@ -183,7 +183,7 @@ export async function handleAudio(ctx: Context): Promise<void> {
   if (!allowed) {
     await auditLogRateLimit(userId, username, retryAfter!);
     await ctx.reply(
-      `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+      `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
     );
     return;
   }
@@ -207,7 +207,7 @@ export async function handleAudio(ctx: Context): Promise<void> {
     await Bun.write(audioPath, buffer);
   } catch (error) {
     console.error("Failed to download audio:", error);
-    await ctx.reply("❌ Failed to download audio file.");
+    await ctx.reply("❌ Die Audiodatei konnte leider nicht geladen werden.");
     return;
   }
 

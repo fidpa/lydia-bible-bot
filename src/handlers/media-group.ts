@@ -73,7 +73,7 @@ export function createMediaGroupBuffer(config: MediaGroupConfig) {
         await group.ctx.api.editMessageText(
           group.statusMsg.chat.id,
           group.statusMsg.message_id,
-          `${config.emoji} Processing ${group.items.length} ${config.itemLabelPlural}...`
+          `${config.emoji} Verarbeite ${group.items.length} ${config.itemLabelPlural}...`
         );
       } catch (error) {
         console.debug("Failed to update status message:", error);
@@ -121,7 +121,7 @@ export function createMediaGroupBuffer(config: MediaGroupConfig) {
       if (!allowed) {
         await auditLogRateLimit(userId, username, retryAfter!);
         await ctx.reply(
-          `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+          `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
         );
         return false;
       }
@@ -129,7 +129,7 @@ export function createMediaGroupBuffer(config: MediaGroupConfig) {
       // Create new group
       console.log(`Receiving ${config.itemLabel} album from @${username}`);
       const statusMsg = await ctx.reply(
-        `${config.emoji} Receiving ${config.itemLabelPlural}...`
+        `${config.emoji} Empfange ${config.itemLabelPlural}...`
       );
 
       pendingGroups.set(mediaGroupId, {
@@ -199,7 +199,7 @@ export async function handleProcessingError(
     const session = userId ? getSession(userId) : null;
     const wasInterrupt = session?.consumeInterruptFlag() ?? false;
     if (!wasInterrupt) {
-      await ctx.reply("🛑 Query stopped.");
+      await ctx.reply("🛑 Abgebrochen.");
     }
   } else {
     console.error("Media processing error detail:", errorStr);

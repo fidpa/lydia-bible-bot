@@ -151,7 +151,7 @@ export async function handleCallback(ctx: Context): Promise<void> {
       // Only show "Query stopped" if it was an explicit stop, not an interrupt from a new message
       const wasInterrupt = session.consumeInterruptFlag();
       if (!wasInterrupt) {
-        await ctx.reply("🛑 Query stopped.");
+        await ctx.reply("🛑 Abgebrochen.");
       }
     } else {
       console.error("Callback error detail:", error);

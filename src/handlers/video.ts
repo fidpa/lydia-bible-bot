@@ -68,7 +68,7 @@ export async function handleVideo(ctx: Context): Promise<void> {
   // 2. Check file size
   if (video.file_size && video.file_size > MAX_VIDEO_SIZE) {
     await ctx.reply(
-      `❌ Video too large. Maximum size is ${MAX_VIDEO_SIZE / 1024 / 1024}MB.`
+      `❌ Das Video ist leider zu groß (max. ${MAX_VIDEO_SIZE / 1024 / 1024} MB).`
     );
     return;
   }
@@ -78,7 +78,7 @@ export async function handleVideo(ctx: Context): Promise<void> {
   if (!allowed) {
     await auditLogRateLimit(userId, username, retryAfter!);
     await ctx.reply(
-      `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+      `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
     );
     return;
   }
@@ -87,7 +87,7 @@ export async function handleVideo(ctx: Context): Promise<void> {
 
   // 4. Download video
   let videoPath: string;
-  const statusMsg = await ctx.reply("📹 Downloading video...");
+  const statusMsg = await ctx.reply("📹 Lade das Video...");
 
   try {
     videoPath = await downloadVideo(ctx);
@@ -96,7 +96,7 @@ export async function handleVideo(ctx: Context): Promise<void> {
     await ctx.api.editMessageText(
       chatId,
       statusMsg.message_id,
-      "❌ Failed to download video."
+      "❌ Das Video konnte leider nicht geladen werden."
     );
     return;
   }
@@ -111,7 +111,7 @@ export async function handleVideo(ctx: Context): Promise<void> {
     await ctx.api.editMessageText(
       chatId,
       statusMsg.message_id,
-      "📹 Processing video..."
+      "📹 Schaue mir das Video an..."
     );
 
     // Build prompt with video path and content delimiters (SEC-001)

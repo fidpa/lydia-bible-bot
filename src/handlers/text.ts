@@ -62,7 +62,7 @@ export async function handleText(ctx: Context): Promise<void> {
   if (!allowed) {
     await auditLogRateLimit(userId, username, retryAfter!);
     await ctx.reply(
-      `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+      `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
     );
     return;
   }
@@ -124,7 +124,7 @@ export async function handleText(ctx: Context): Promise<void> {
           `Claude Code crashed, retrying (attempt ${attempt + 2}/${MAX_RETRIES + 1})...`
         );
         await session.kill(); // Clear corrupted session
-        await ctx.reply(`⚠️ Claude crashed, retrying...`);
+        await ctx.reply("⚠️ Entschuldigung, ich muss kurz neu ansetzen...");
         // Reset state for retry
         state = new StreamingState();
         statusCallback = createStatusCallback(ctx, state);
@@ -139,7 +139,7 @@ export async function handleText(ctx: Context): Promise<void> {
         // Only show "Query stopped" if it was an explicit stop, not an interrupt from a new message
         const wasInterrupt = session.consumeInterruptFlag();
         if (!wasInterrupt) {
-          await ctx.reply("🛑 Query stopped.");
+          await ctx.reply("🛑 Abgebrochen.");
         }
       } else {
         console.error("User-facing error:", errorStr);

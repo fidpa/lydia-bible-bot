@@ -68,8 +68,8 @@ const MAX_EXTRACTED_SIZE = 100 * 1024 * 1024;
 // Create document-specific media group buffer
 const documentBuffer = createMediaGroupBuffer({
   emoji: "📄",
-  itemLabel: "document",
-  itemLabelPlural: "documents",
+  itemLabel: "Dokument",
+  itemLabelPlural: "Dokumente",
 });
 
 /**
@@ -460,7 +460,7 @@ async function processDocumentPaths(
   }
 
   if (documents.length === 0) {
-    await ctx.reply("❌ Failed to extract any documents.");
+    await ctx.reply("❌ Die Dokumente konnten leider nicht gelesen werden.");
     return;
   }
 
@@ -499,7 +499,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
 
   // 2. Check file size
   if (doc.file_size && doc.file_size > MAX_FILE_SIZE) {
-    await ctx.reply("❌ File too large. Maximum size is 10MB.");
+    await ctx.reply("❌ Die Datei ist leider zu groß (max. 10 MB).");
     return;
   }
 
@@ -520,7 +520,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
     if (!allowed) {
       await auditLogRateLimit(userId, username, retryAfter!);
       await ctx.reply(
-        `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+        `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
       );
       return;
     }
@@ -531,7 +531,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
       docPath = await downloadDocument(ctx);
     } catch (error) {
       console.error("Failed to download audio document:", error);
-      await ctx.reply("❌ Failed to download audio file.");
+      await ctx.reply("❌ Die Audiodatei konnte leider nicht geladen werden.");
       return;
     }
 
@@ -541,10 +541,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
 
   if (!isPdf && !isText && !isArchiveFile) {
     await ctx.reply(
-      `❌ Unsupported file type: ${extension || doc.mime_type}\n\n` +
-        `Supported: PDF, archives (${ARCHIVE_EXTENSIONS.join(
-          ", "
-        )}), ${TEXT_EXTENSIONS.join(", ")}`
+      `❌ Dieses Dateiformat (${extension || doc.mime_type}) kann ich leider nicht verarbeiten.`
     );
     return;
   }
@@ -555,7 +552,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
     docPath = await downloadDocument(ctx);
   } catch (error) {
     console.error("Failed to download document:", error);
-    await ctx.reply("❌ Failed to download document.");
+    await ctx.reply("❌ Das Dokument konnte leider nicht geladen werden.");
     return;
   }
 
@@ -566,7 +563,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
     if (!allowed) {
       await auditLogRateLimit(userId, username, retryAfter!);
       await ctx.reply(
-        `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+        `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
       );
       return;
     }
@@ -591,7 +588,7 @@ export async function handleDocument(ctx: Context): Promise<void> {
     if (!allowed) {
       await auditLogRateLimit(userId, username, retryAfter!);
       await ctx.reply(
-        `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+        `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
       );
       return;
     }

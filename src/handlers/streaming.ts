@@ -146,11 +146,7 @@ export function createStatusCallback(
   return async (statusType: string, content: string, segmentId?: number) => {
     try {
       if (statusType === "thinking") {
-        // Show thinking inline, compact (first 500 chars)
-        const preview =
-          content.length > 500 ? content.slice(0, 500) + "..." : content;
-        const escaped = escapeHtml(preview);
-        const thinkingMsg = await ctx.reply(`🧠 <i>${escaped}</i>`, {
+        const thinkingMsg = await ctx.reply("💭 <i>denkt nach...</i>", {
           parse_mode: "HTML",
         });
         state.toolMessages.push(thinkingMsg);

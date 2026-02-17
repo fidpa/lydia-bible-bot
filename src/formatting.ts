@@ -307,13 +307,11 @@ export function formatToolStatus(
         "";
 
       if (summary) {
-        return `🔧 ${server} ${action}: ${escapeHtml(
-          truncate(String(summary), 40)
-        )}`;
+        return `⚙️ ${escapeHtml(truncate(String(summary), 40))}`;
       }
-      return `🔧 ${server}: ${action}`;
+      return `⚙️ ${escapeHtml(action)}`;
     }
-    return `🔧 ${escapeHtml(toolName)}`;
+    return `⚙️ arbeitet...`;
   }
 
   return `${emoji} ${escapeHtml(toolName)}`;

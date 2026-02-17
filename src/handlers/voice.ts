@@ -59,7 +59,7 @@ export async function handleVoice(ctx: Context): Promise<void> {
   if (!allowed) {
     await auditLogRateLimit(userId, username, retryAfter!);
     await ctx.reply(
-      `⏳ Rate limited. Please wait ${retryAfter!.toFixed(1)} seconds.`
+      `⏳ Einen Moment bitte... (${retryAfter!.toFixed(1)} Sek.)`
     );
     return;
   }
@@ -89,14 +89,14 @@ export async function handleVoice(ctx: Context): Promise<void> {
     await Bun.write(voicePath, buffer);
 
     // 7. Transcribe
-    const statusMsg = await ctx.reply("🎤 Transcribing...");
+    const statusMsg = await ctx.reply("🎤 Höre zu...");
 
     const transcript = await transcribeVoice(voicePath);
     if (!transcript) {
       await ctx.api.editMessageText(
         chatId,
         statusMsg.message_id,
-        "❌ Transcription failed."
+        "❌ Ich konnte die Sprachnachricht leider nicht verstehen."
       );
       stopProcessing();
       return;
@@ -144,7 +144,7 @@ export async function handleVoice(ctx: Context): Promise<void> {
       // Only show "Query stopped" if it was an explicit stop, not an interrupt from a new message
       const wasInterrupt = session.consumeInterruptFlag();
       if (!wasInterrupt) {
-        await ctx.reply("🛑 Query stopped.");
+        await ctx.reply("🛑 Abgebrochen.");
       }
     } else {
       console.error("Voice handler error:", error);
