@@ -275,6 +275,17 @@ export function formatToolStatus(
   }
 
   if (toolName.startsWith("mcp__")) {
+    // Bible MCP — custom Lydia-style status
+    if (toolName.startsWith("mcp__bible__")) {
+      const book = toolInput.book ? String(toolInput.book) : "";
+      const chapter = toolInput.chapter ? String(toolInput.chapter) : "";
+      const ref = book && chapter ? `${book} ${chapter}` : book;
+      if (ref) {
+        return `📖 blättert in der Schrift... ${escapeHtml(ref)}`;
+      }
+      return "📖 blättert in der Schrift...";
+    }
+
     // Generic MCP tool formatting
     const parts = toolName.split("__");
     if (parts.length >= 3) {
