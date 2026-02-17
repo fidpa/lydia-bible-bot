@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -13,7 +13,7 @@ bun install        # Install dependencies
 
 ## Architecture
 
-This is a Telegram bot (~3,300 lines TypeScript) that lets you control Claude Code from your phone via text, voice, photos, and documents. Built with Bun and grammY.
+This is a Telegram bot (~6,000 lines TypeScript) that serves as a Bible study assistant, controllable from your phone via text, voice, photos, and documents. Built with Bun and grammY.
 
 ### Message Flow
 
@@ -25,7 +25,7 @@ Telegram message → Handler → Auth check → Rate limit → Claude session �
 
 - **`src/index.ts`** - Entry point, registers handlers, starts polling
 - **`src/config.ts`** - Environment parsing, MCP loading, safety prompts
-- **`src/session.ts`** - `ClaudeSession` class wrapping Agent SDK V2 with streaming, session persistence (`/tmp/claude-telegram-session.json`), and defense-in-depth safety checks
+- **`src/session.ts`** - `ClaudeSession` class wrapping Agent SDK with streaming, session persistence (`~/.lydia-bibel-bot/sessions.json`), and defense-in-depth safety checks
 - **`src/security.ts`** - `RateLimiter` (token bucket), path validation, command safety checks
 - **`src/formatting.ts`** - Markdown→HTML conversion for Telegram, tool status emoji formatting
 - **`src/utils.ts`** - Audit logging, voice transcription (local whisper-cli), typing indicators
@@ -34,11 +34,12 @@ Telegram message → Handler → Auth check → Rate limit → Claude session �
 ### Handlers (`src/handlers/`)
 
 Each message type has a dedicated async handler:
-- **`commands.ts`** - `/start`, `/new`, `/stop`, `/status`, `/resume`, `/restart`, `/retry`
+- **`commands.ts`** - `/start`, `/new`, `/stop`, `/status`, `/resume`, `/restart`, `/retry`, `/voice`
 - **`text.ts`** - Text messages with intent filtering
 - **`voice.ts`** - Voice→text via local whisper-cli, then same flow as text
 - **`audio.ts`** - Audio file transcription via local whisper-cli (mp3, m4a, ogg, wav, etc.), also handles audio sent as documents
-- **`photo.ts`** - Image analysis with media group buffering (1s timeout for albums)
+- **`photo.ts`** - Image analysis with album detection
+- **`media-group.ts`** - Album/media group buffering (1s timeout for collecting album items)
 - **`document.ts`** - PDF extraction (pdftotext CLI), text files, archives, routes audio files to `audio.ts`
 - **`video.ts`** - Video messages and video notes
 - **`callback.ts`** - Inline keyboard button handling for ask_user MCP

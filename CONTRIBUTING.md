@@ -41,8 +41,9 @@ lydia-bible-bot/
 │   ├── security.ts    # Rate limiting, path validation, command safety
 │   ├── session.ts     # Claude Agent SDK session management
 │   └── ...
+├── bible_mcp/         # MCP server for exact Bible verse lookups (SQLite)
 ├── ask_user_mcp/      # MCP server for Telegram inline keyboards
-├── docs/              # Documentation (security, privacy)
+├── docs/              # Documentation (security, privacy, sessions)
 └── CLAUDE.md          # Theological system prompt
 ```
 

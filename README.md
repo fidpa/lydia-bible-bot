@@ -143,6 +143,7 @@ lydia-bible-bot/
 │       ├── audio.ts       # Audio file transcription
 │       ├── video.ts       # Video messages and video notes
 │       ├── callback.ts    # Inline keyboard (MCP ask-user)
+│       ├── media-group.ts # Album/media group buffering (1s timeout)
 │       ├── streaming.ts   # Shared streaming state and status callbacks
 │       ├── commands.ts    # Bot command handlers
 │       └── index.ts       # Handler exports
@@ -153,7 +154,10 @@ lydia-bible-bot/
 ├── ask_user_mcp/          # MCP server for interactive Telegram buttons
 ├── docs/
 │   ├── security-limitations.md  # Architectural security analysis
-│   └── datenschutz.md           # GDPR privacy notice (German)
+│   ├── datenschutz.md           # GDPR privacy notice (German)
+│   ├── sessions.md              # Session management behavior
+│   ├── lydia-quellen.md         # Biblical sources for the Lydia persona
+│   └── bible-mcp-research.md    # Bible API research and alternatives
 ├── CLAUDE.md              # Theological system prompt (loaded by Claude)
 ├── SECURITY.md            # Security model documentation
 └── THIRD_PARTY_LICENSES.md
@@ -209,7 +213,7 @@ MIT License - see [LICENSE](LICENSE)
 
 Marc Allgeier ([@fidpa](https://github.com/fidpa))
 
-**Why I Built This**: I wanted a Bible study assistant for our Telegram group that goes beyond a simple API wrapper. The upstream project gave me the foundation, but deploying an AI agent with `bypassPermissions` for multiple users required a systematic security approach. The audit uncovered 17 findings, 13 of which I hardened directly, with the remaining 7 documented transparently as architectural limitations. This project demonstrates that security work is as much about honest documentation as it is about writing code.
+**Why I Built This**: I wanted a Bible study assistant for our Telegram group that goes beyond a simple API wrapper. The upstream project gave me the foundation, but deploying an AI agent with `bypassPermissions` for multiple users required a systematic security approach. The audit uncovered 17 findings — all addressed through 13 hardening measures, with 7 architectural limitations documented transparently. This project demonstrates that security work is as much about honest documentation as it is about writing code.
 
 ## See Also
 
