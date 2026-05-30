@@ -12,12 +12,12 @@ Quellen, die dem Namensabschnitt und Charakterprofil in CLAUDE.md zugrunde liege
 | Eigenschaft | Beleg |
 |---|---|
 | Name: Lydia | Apg 16,14 |
-| Beruf: Purpurhaendlerin (*porphyropolis*) | Apg 16,14 |
+| Beruf: Purpurhaendlerin (_porphyropolis_) | Apg 16,14 |
 | Herkunft: Thyatira (heutiges Akhisar, Tuerkei) | Apg 16,14 |
-| Religioeser Status: Gottesfuerchtige (*sebomene ton theon*) | Apg 16,14 |
-| Aufmerksame Zuhoererin (*prosechein*) | Apg 16,14 |
-| Taufe mit ihrem ganzen Haushalt (*ho oikos autes*) | Apg 16,15 |
-| Ueberzeugte Paulus zu bleiben (*parabiazesthai*) | Apg 16,15 |
+| Religioeser Status: Gottesfuerchtige (_sebomene ton theon_) | Apg 16,14 |
+| Aufmerksame Zuhoererin (_prosechein_) | Apg 16,14 |
+| Taufe mit ihrem ganzen Haushalt (_ho oikos autes_) | Apg 16,15 |
+| Ueberzeugte Paulus zu bleiben (_parabiazesthai_) | Apg 16,15 |
 | "Mein Haus" — Hausherrin ohne erwaehnte maennliche Autoritaet | Apg 16,15 |
 | Ihr Haus als Versammlungsort der Gemeinde | Apg 16,40 |
 
@@ -25,22 +25,22 @@ Quellen, die dem Namensabschnitt und Charakterprofil in CLAUDE.md zugrunde liege
 
 ### Kommentare und Monographien
 
-- **Craig S. Keener**: *Acts: An Exegetical Commentary*, Vol. 3.
+- **Craig S. Keener**: _Acts: An Exegetical Commentary_, Vol. 3.
   Klassifiziert Lydia als "relatively wealthy commoner". Ausfuehrlich zu
   Gottesfuerchtigen, Purpurhandel und Frauenrollen in Makedonien.
 
-- **Ivoni Richter Reimer**: *Women in the Acts of the Apostles: A Feminist
-  Liberation Perspective*. Lydia als Beispiel fuer weibliche Handlungsfaehigkeit
+- **Ivoni Richter Reimer**: _Women in the Acts of the Apostles: A Feminist
+  Liberation Perspective_. Lydia als Beispiel fuer weibliche Handlungsfaehigkeit
   und oekonomische Unabhaengigkeit im fruehen Christentum.
 
-- **Teresa Calpino**: *Women, Work, and Leadership in Acts*. Mohr Siebeck, 2014.
+- **Teresa Calpino**: _Women, Work, and Leadership in Acts_. Mohr Siebeck, 2014.
   Untersucht Lydia neben anderen Frauen in Leitungsfunktionen.
 
-- **Cynthia Westfall**: *Paul and Gender: Reclaiming the Apostle's Vision*.
+- **Cynthia Westfall**: _Paul and Gender: Reclaiming the Apostle's Vision_.
   Ordnet Lydia in Paulus' affirmativen Umgang mit weiblichen Mitarbeitern ein.
 
 - **Louis H. Feldman**: "The Omnipresence of the God-Fearers."
-  *Biblical Archaeology Review* 12, No. 5 (1986). Zum Phaenomen der
+  _Biblical Archaeology Review_ 12, No. 5 (1986). Zum Phaenomen der
   Gottesfuerchtigen als sozialer Kategorie.
 
 ### Online-Quellen
@@ -57,12 +57,12 @@ Quellen, die dem Namensabschnitt und Charakterprofil in CLAUDE.md zugrunde liege
 ### Historischer Kontext
 
 - **Purpurhandel und Thyatira**: Archaeologische Inschriften aus Thyatira
-  belegen eine Faerber-Gilde (*to bapheion*). Mehr Handwerks-Gilden sind
+  belegen eine Faerber-Gilde (_to bapheion_). Mehr Handwerks-Gilden sind
   aus Thyatira bekannt als aus jeder anderen Stadt im roemischen Kleinasien.
   Quelle: [Thyatira — Wikipedia](https://en.wikipedia.org/wiki/Thyatira)
 
 - **Gottesfuerchtige als Kategorie**: Bestaetigt durch die Aphrodisias-Inschrift
-  (entdeckt 1976), die *theosebeis* als eigene Gruppe neben Juden und
+  (entdeckt 1976), die _theosebeis_ als eigene Gruppe neben Juden und
   Proselyten auffuehrt.
   Quelle: [God-fearer — Wikipedia](https://en.wikipedia.org/wiki/God-fearer)
 
@@ -77,7 +77,7 @@ Lydia wird als Heilige in mehreren Traditionen verehrt:
 | Tradition | Gedenktag | Titel |
 |---|---|---|
 | Roemisch-katholisch | 20. Mai / 3. August | Heilige Lydia Purpuraria |
-| Orthodoxe Kirche | 20. Mai | Apostelgleiche (*isapostolos*) |
+| Orthodoxe Kirche | 20. Mai | Apostelgleiche (_isapostolos_) |
 | Lutherisch | 27. Januar | — |
 | Anglikanisch | 3. August | — |
 
@@ -92,7 +92,7 @@ Die fuenf Charakterzuege in CLAUDE.md leiten sich direkt aus den Quellen ab:
 | Charakterzug | Biblischer Beleg | Ableitung |
 |---|---|---|
 | GASTFREUNDLICH | Apg 16,15 — oeffnet ihr Haus | Einladung an Paulus' gesamtes Team |
-| AUFMERKSAM | Apg 16,14 — *prosechein* (aufmerksam achtgeben) | Griechisches Verb betont aktives Zuhoeren |
+| AUFMERKSAM | Apg 16,14 — _prosechein_ (aufmerksam achtgeben) | Griechisches Verb betont aktives Zuhoeren |
 | DIREKT | Apg 16,15 — logisches Argument ("Wenn ihr urteilt, dass ich glaeubig bin...") | Kein zaghaftes Bitten, sondern ueberzeugendes Argumentieren |
 | NEUGIERIG | Apg 16,13-14 — am Sabbat am Gebetsort, bevor Paulus kam | Aktive Gottsucherin, nicht passive Zuhoererin |
 | PRAKTISCH | Apg 16,15.40 — Glaube muendet sofort in Handlung (Taufe, Gastfreundschaft, Gemeindegruendung) | Kein abstraktes Theologisieren, sondern gelebter Glaube |

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-05-30
+
+### Changed
+- Bump `@anthropic-ai/claude-agent-sdk` from `^0.1.76` to `^0.3.158` (required for compatibility with Claude CLI ≥ 2.1.156; older SDK returned empty responses silently)
+- Change default model from `claude-sonnet-4-5` to `claude-sonnet-4-6`
+
 ## [1.2.3] - 2026-02-17
 
 ### Added
