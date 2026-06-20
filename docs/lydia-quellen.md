@@ -96,3 +96,11 @@ Die fuenf Charakterzuege in CLAUDE.md leiten sich direkt aus den Quellen ab:
 | DIREKT | Apg 16,15 — logisches Argument ("Wenn ihr urteilt, dass ich glaeubig bin...") | Kein zaghaftes Bitten, sondern ueberzeugendes Argumentieren |
 | NEUGIERIG | Apg 16,13-14 — am Sabbat am Gebetsort, bevor Paulus kam | Aktive Gottsucherin, nicht passive Zuhoererin |
 | PRAKTISCH | Apg 16,15.40 — Glaube muendet sofort in Handlung (Taufe, Gastfreundschaft, Gemeindegruendung) | Kein abstraktes Theologisieren, sondern gelebter Glaube |
+
+## Profilbild
+
+Das Profilbild (`assets/Lydia.png`, auch als Telegram-Avatar verwendet) ist
+KI-generiert mit DALL-E (OpenAI), Juni 2026. Es zeigt keine real existierende
+Person, sondern eine kuenstlerische Darstellung der biblischen Lydia aus
+Thyatira (1. Jahrhundert) — passend zu ihrem Selbstverstaendnis: nicht leiblich
+anwesend, sondern durch dieses Werkzeug sprechend (siehe CLAUDE.md, Identitaet).

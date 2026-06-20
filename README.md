@@ -10,6 +10,10 @@
 
 Security-hardened AI Bible study assistant for Telegram groups, built on [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot). Uses Claude (Anthropic) for theological discussion, with local voice transcription via whisper.cpp.
 
+![Lydia](assets/Lydia.png)
+
+> Profile image AI-generated with DALL-E (OpenAI) — see [Lydia sources](docs/lydia-quellen.md#profilbild).
+
 **The Problem**: Running an AI assistant in a Telegram group requires more than just connecting an API. The upstream project provides an excellent foundation for controlling Claude Code via Telegram, but deploying it for a group of users demands systematic security hardening: rate limiting, path validation, command safety checks, prompt injection defenses, and audit logging. After conducting a full security audit and implementing 13 hardening measures, this repository documents the entire process transparently, including the limitations that remain.
 
 ## Features
