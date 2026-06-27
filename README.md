@@ -104,6 +104,41 @@ All configuration via environment variables (see [.env.example](.env.example)):
 
 MCP servers are configured in `mcp-config.ts` (see [mcp-config.example.ts](mcp-config.example.ts)).
 
+## Exporting Chat Transcripts
+
+`scripts/export-chat.ts` turns a stored conversation into a readable Markdown
+file and, optionally, Word (`.docx`) and PDF. The source are the JSONL
+transcripts that Claude Code keeps per session under
+`~/.claude/projects/<working-dir>/<session-id>.jsonl`.
+
+```bash
+# List available sessions (id, date, title)
+bun run export-chat -- --list
+
+# Export one session (an id prefix is enough as long as it is unique)
+bun run export-chat -- a1b2c3d4 --heading "Proverbs 11:31"
+
+# Most recently modified session, Markdown + PDF only
+bun run export-chat -- --latest --formats md,pdf
+```
+
+User questions are colored red, Lydia's answers green (in PDF **and** Word).
+Customize via `--color-question <hex>` / `--color-answer <hex>`, or disable with
+`--no-color`. Modes: `--mode conversation|verses|full` (default `verses` =
+dialogue plus looked-up Bible verses as block quotes). Full options via
+`bun run export-chat -- --help`. The rendered document keeps Lydia's German
+wording (the bot speaks German); only the tooling itself is in English.
+
+**Prerequisites:**
+
+- `pandoc` for Word/PDF conversion (`brew install pandoc`).
+- For PDF additionally `weasyprint` (`brew install weasyprint`) — it renders
+  Unicode including Hebrew script (e.g. שָׁלוֹם) cleanly via the system fonts.
+  Without weasyprint, Markdown and Word still work.
+
+Exports are written to `exports/` (excluded via `.gitignore`, since they contain
+personal conversation content).
+
 ## Security
 
 The bot implements defense-in-depth with 6 security layers:
@@ -156,6 +191,8 @@ lydia-bible-bot/
 │   ├── download.ts        # One-time Schlachter 2000 download from bolls.life
 │   └── aliases.ts         # German book name aliases (Jesaja→23, 1Mo→1, etc.)
 ├── ask_user_mcp/          # MCP server for interactive Telegram buttons
+├── scripts/
+│   └── export-chat.ts     # Export a chat transcript to Markdown/Word/PDF
 ├── docs/
 │   ├── security-limitations.md  # Architectural security analysis
 │   ├── datenschutz.md           # GDPR privacy notice (German)

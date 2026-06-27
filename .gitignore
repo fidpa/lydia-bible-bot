@@ -6,6 +6,9 @@ out
 dist
 *.tgz
 
+# exported chat transcripts (generated; may contain personal chat content)
+exports/
+
 # code coverage
 coverage
 *.lcov
@@ -52,3 +55,6 @@ bible_mcp/data/
 # Personal/marketing
 LINKEDIN_POST.md
 REDDIT_POST.md
+
+# explain-audio output (lokal generiertes TTS-Hörstück, .txt + .mp3)
+/explain-audio/

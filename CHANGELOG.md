@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-06-27
+
+### Added
+- `scripts/export-chat.ts` — export a stored chat transcript to Markdown and, optionally, Word (`.docx`) and PDF via pandoc. Cleaned-up question/answer dialogue with looked-up Bible verses as block quotes; questions colored red, answers green (PDF and Word); PDF uses `--pdf-engine=weasyprint` for clean Unicode/Hebrew rendering. New `export-chat` package script; see README section "Exporting Chat Transcripts".
+
 ## [1.3.1] - 2026-06-20
 
 ### Added
