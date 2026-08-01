@@ -1,11 +1,11 @@
-# Lydia — Quellen zur Namensgebung und Charakterprofil
+# Lydia: Quellen zur Namensgebung und Charakterprofil
 
 Quellen, die dem Namensabschnitt und Charakterprofil in CLAUDE.md zugrunde liegen.
 
 ## Primaerquellen (Bibel)
 
-- **Apostelgeschichte 16,14-15.40** — einzige direkte Erwaehnung Lydias
-- **Philipper 1,3-5; 4,2-3; 4,15-16** — indirekte Bezuege zur Gemeinde in Philippi
+- **Apostelgeschichte 16,14-15.40**: einzige direkte Erwaehnung Lydias
+- **Philipper 1,3-5; 4,2-3; 4,15-16**: indirekte Bezuege zur Gemeinde in Philippi
 
 ### Was der Text explizit sagt (Apg 16,14-15.40)
 
@@ -18,7 +18,7 @@ Quellen, die dem Namensabschnitt und Charakterprofil in CLAUDE.md zugrunde liege
 | Aufmerksame Zuhoererin (_prosechein_) | Apg 16,14 |
 | Taufe mit ihrem ganzen Haushalt (_ho oikos autes_) | Apg 16,15 |
 | Ueberzeugte Paulus zu bleiben (_parabiazesthai_) | Apg 16,15 |
-| "Mein Haus" — Hausherrin ohne erwaehnte maennliche Autoritaet | Apg 16,15 |
+| "Mein Haus": Hausherrin ohne erwaehnte maennliche Autoritaet | Apg 16,15 |
 | Ihr Haus als Versammlungsort der Gemeinde | Apg 16,40 |
 
 ## Sekundaerquellen (Wissenschaft und Nachschlagewerke)
@@ -45,14 +45,14 @@ Quellen, die dem Namensabschnitt und Charakterprofil in CLAUDE.md zugrunde liege
 
 ### Online-Quellen
 
-- Marg Mowczko — [Lydia of Thyatira: The Founding Member of the Philippian Church](https://margmowczko.com/lydia-of-thyatira-philippi/)
-- Regent University — [Was Lydia a Leader of the Church in Philippi?](https://www.regent.edu/journal/journal-of-biblical-perspectives-in-leadership/lydia-in-the-bible/)
-- Biblical Archaeology Society — [Lydia and Tabitha in the Bible](https://www.biblicalarchaeology.org/daily/people-cultures-in-the-bible/people-in-the-bible/lydia-and-tabitha-in-the-bible/)
-- CBE International — [Women Leaders in the Philippian Church](https://www.cbeinternational.org/resource/women-leaders-philippian-church/)
-- Reading Acts — [Acts 16:13-15, Lydia of Thyatira](https://readingacts.com/2019/03/12/acts-1613-15-lydia-of-thyatira/)
-- Bible Odyssey — [Lydia](https://www.bibleodyssey.org/articles/lydia/)
-- GotQuestions — [Who Was Lydia in the Bible?](https://www.gotquestions.org/Lydia-in-the-Bible.html)
-- BibleHub Commentaries — [Acts 16:14](https://biblehub.com/commentaries/acts/16-14.htm)
+- Marg Mowczko: [Lydia of Thyatira: The Founding Member of the Philippian Church](https://margmowczko.com/lydia-of-thyatira-philippi/)
+- Regent University: [Was Lydia a Leader of the Church in Philippi?](https://www.regent.edu/journal/journal-of-biblical-perspectives-in-leadership/lydia-in-the-bible/)
+- Biblical Archaeology Society: [Lydia and Tabitha in the Bible](https://www.biblicalarchaeology.org/daily/people-cultures-in-the-bible/people-in-the-bible/lydia-and-tabitha-in-the-bible/)
+- CBE International: [Women Leaders in the Philippian Church](https://www.cbeinternational.org/resource/women-leaders-philippian-church/)
+- Reading Acts: [Acts 16:13-15, Lydia of Thyatira](https://readingacts.com/2019/03/12/acts-1613-15-lydia-of-thyatira/)
+- Bible Odyssey: [Lydia](https://www.bibleodyssey.org/articles/lydia/)
+- GotQuestions: [Who Was Lydia in the Bible?](https://www.gotquestions.org/Lydia-in-the-Bible.html)
+- BibleHub Commentaries: [Acts 16:14](https://biblehub.com/commentaries/acts/16-14.htm)
 
 ### Historischer Kontext
 
@@ -78,8 +78,8 @@ Lydia wird als Heilige in mehreren Traditionen verehrt:
 |---|---|---|
 | Roemisch-katholisch | 20. Mai / 3. August | Heilige Lydia Purpuraria |
 | Orthodoxe Kirche | 20. Mai | Apostelgleiche (_isapostolos_) |
-| Lutherisch | 27. Januar | — |
-| Anglikanisch | 3. August | — |
+| Lutherisch | 27. Januar |: |
+| Anglikanisch | 3. August |: |
 
 Quellen:
 - [Catholic Online — St. Lydia Purpuraria](https://www.catholic.org/saints/saint.php?saint_id=713)
@@ -91,16 +91,16 @@ Die fuenf Charakterzuege in CLAUDE.md leiten sich direkt aus den Quellen ab:
 
 | Charakterzug | Biblischer Beleg | Ableitung |
 |---|---|---|
-| GASTFREUNDLICH | Apg 16,15 — oeffnet ihr Haus | Einladung an Paulus' gesamtes Team |
-| AUFMERKSAM | Apg 16,14 — _prosechein_ (aufmerksam achtgeben) | Griechisches Verb betont aktives Zuhoeren |
-| DIREKT | Apg 16,15 — logisches Argument ("Wenn ihr urteilt, dass ich glaeubig bin...") | Kein zaghaftes Bitten, sondern ueberzeugendes Argumentieren |
-| NEUGIERIG | Apg 16,13-14 — am Sabbat am Gebetsort, bevor Paulus kam | Aktive Gottsucherin, nicht passive Zuhoererin |
-| PRAKTISCH | Apg 16,15.40 — Glaube muendet sofort in Handlung (Taufe, Gastfreundschaft, Gemeindegruendung) | Kein abstraktes Theologisieren, sondern gelebter Glaube |
+| GASTFREUNDLICH | Apg 16,15: oeffnet ihr Haus | Einladung an Paulus' gesamtes Team |
+| AUFMERKSAM | Apg 16,14: _prosechein_ (aufmerksam achtgeben) | Griechisches Verb betont aktives Zuhoeren |
+| DIREKT | Apg 16,15: logisches Argument ("Wenn ihr urteilt, dass ich glaeubig bin...") | Kein zaghaftes Bitten, sondern ueberzeugendes Argumentieren |
+| NEUGIERIG | Apg 16,13-14: am Sabbat am Gebetsort, bevor Paulus kam | Aktive Gottsucherin, nicht passive Zuhoererin |
+| PRAKTISCH | Apg 16,15.40: Glaube muendet sofort in Handlung (Taufe, Gastfreundschaft, Gemeindegruendung) | Kein abstraktes Theologisieren, sondern gelebter Glaube |
 
 ## Profilbild
 
 Das Profilbild (`assets/Lydia.png`, auch als Telegram-Avatar verwendet) ist
 KI-generiert mit DALL-E (OpenAI), Juni 2026. Es zeigt keine real existierende
 Person, sondern eine kuenstlerische Darstellung der biblischen Lydia aus
-Thyatira (1. Jahrhundert) — passend zu ihrem Selbstverstaendnis: nicht leiblich
+Thyatira (1. Jahrhundert). Das passt zu ihrem Selbstverstaendnis: nicht leiblich
 anwesend, sondern durch dieses Werkzeug sprechend (siehe CLAUDE.md, Identitaet).

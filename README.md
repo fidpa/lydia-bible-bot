@@ -12,7 +12,7 @@ Security-hardened AI Bible study assistant for Telegram groups, built on [linuz9
 
 ![Lydia](assets/Lydia.png)
 
-> Profile image AI-generated with DALL-E (OpenAI) — see [Lydia sources](docs/lydia-quellen.md#profilbild).
+> Profile image AI-generated with DALL-E (OpenAI), see [Lydia sources](docs/lydia-quellen.md#profilbild).
 
 **The Problem**: Running an AI assistant in a Telegram group requires more than just connecting an API. The upstream project provides an excellent foundation for controlling Claude Code via Telegram, but deploying it for a group of users demands systematic security hardening: rate limiting, path validation, command safety checks, prompt injection defenses, and audit logging. After conducting a full security audit and implementing 13 hardening measures, this repository documents the entire process transparently, including the limitations that remain.
 
@@ -95,7 +95,7 @@ All configuration via environment variables (see [.env.example](.env.example)):
 | `TELEGRAM_BOT_TOKEN` | Yes | Bot token from @BotFather |
 | `TELEGRAM_ALLOWED_USERS` | Yes | Comma-separated Telegram user IDs |
 | `CLAUDE_WORKING_DIR` | Recommended | Working directory for Claude (loads CLAUDE.md) |
-| `WHISPER_MODE` | Optional | `local` (default) or `off` — voice transcription mode |
+| `WHISPER_MODE` | Optional | `local` (default) or `off` for voice transcription mode |
 | `WHISPER_MODEL_PATH` | Optional | Path to GGML whisper model (default: `models/ggml-*.bin`) |
 | `ALLOWED_PATHS` | Optional | Directories Claude can access (default: working dir, ~/Documents, ~/Downloads, ~/Desktop) |
 | `RATE_LIMIT_REQUESTS` | Optional | Requests per window (default: 20) |
@@ -132,7 +132,7 @@ wording (the bot speaks German); only the tooling itself is in English.
 **Prerequisites:**
 
 - `pandoc` for Word/PDF conversion (`brew install pandoc`).
-- For PDF additionally `weasyprint` (`brew install weasyprint`) — it renders
+- For PDF additionally `weasyprint` (`brew install weasyprint`). It renders
   Unicode including Hebrew script (e.g. שָׁלוֹם) cleanly via the system fonts.
   Without weasyprint, Markdown and Word still work.
 
@@ -197,8 +197,7 @@ lydia-bible-bot/
 │   ├── security-limitations.md  # Architectural security analysis
 │   ├── datenschutz.md           # GDPR privacy notice (German)
 │   ├── sessions.md              # Session management behavior
-│   ├── lydia-quellen.md         # Biblical sources for the Lydia persona
-│   └── bible-mcp-research.md    # Bible API research and alternatives
+│   └── lydia-quellen.md         # Biblical sources for the Lydia persona
 ├── CLAUDE.md              # Theological system prompt (loaded by Claude)
 ├── SECURITY.md            # Security model documentation
 └── THIRD_PARTY_LICENSES.md
@@ -254,7 +253,7 @@ MIT License - see [LICENSE](LICENSE)
 
 Marc Allgeier ([@fidpa](https://github.com/fidpa))
 
-**Why I Built This**: I wanted a Bible study assistant for our Telegram group that goes beyond a simple API wrapper. The upstream project gave me the foundation, but deploying an AI agent with `bypassPermissions` for multiple users required a systematic security approach. The audit uncovered 17 findings — all addressed through 13 hardening measures, with 7 architectural limitations documented transparently. This project demonstrates that security work is as much about honest documentation as it is about writing code.
+**Why I Built This**: I wanted a Bible study assistant for our Telegram group that goes beyond a simple API wrapper. The upstream project gave me the foundation, but deploying an AI agent with `bypassPermissions` for multiple users required a systematic security approach. The audit uncovered 17 findings, all addressed through 13 hardening measures, with 7 architectural limitations documented transparently. This project demonstrates that security work is as much about honest documentation as it is about writing code.
 
 ## See Also
 

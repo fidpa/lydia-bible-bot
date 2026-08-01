@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-08-01
+
+### Changed
+- Removed em dashes from the persona and documentation files (`CLAUDE.md`, `README.md`, `docs/lydia-quellen.md`, `docs/sessions.md`) and rewrote the affected passages as full sentences. Measurement across 48 real bot answers showed Lydia reproducing the em-dash density of her own system prompt almost exactly (31.0 per 10k characters in `CLAUDE.md` versus 35.2 in her replies), so the prompt itself was the source of the tic.
+- New "Sprachlicher Stil" section in `CLAUDE.md`: bans em and en dashes, gives before/after examples, and explicitly exempts Bible wording returned by `bible_lookup` so quotations are never reworded. Also covers filler openings and the "not X, but Y" formula.
+
+### Removed
+- `docs/bible-mcp-research.md` (internal research and planning notes, not intended for the public showcase). The file remains reachable through earlier commits and tags; history was left untouched deliberately.
+
 ## [1.4.0] - 2026-06-27
 
 ### Added

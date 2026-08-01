@@ -6,7 +6,7 @@ Wie Lydia sich an Unterhaltungen erinnert und wann sie vergisst.
 
 Jeder Telegram-User hat genau eine Claude-Session (`getSession(userId)` in
 `src/session.ts`). Diese Session wird fuer Gruppen- UND Privatnachrichten
-gleichermassen verwendet — es gibt keine separate Gruppen- oder Privat-Session.
+gleichermassen verwendet. Es gibt keine separate Gruppen- oder Privat-Session.
 
 ## Gedaechtnis
 
@@ -34,7 +34,7 @@ Eine Session wird beendet durch:
 | Session-Wechsel | `/resume` laedt eine andere gespeicherte Session |
 
 **Wichtig:** `/new` im Privatchat beendet auch die Gruppen-Session desselben
-Users, und umgekehrt — es ist dieselbe Session.
+Users, und umgekehrt, denn es ist dieselbe Session.
 
 ## Gruppen vs. Privatnachrichten
 
