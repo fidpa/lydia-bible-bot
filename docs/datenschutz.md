@@ -36,6 +36,14 @@ Bot vollstaendig ignoriert und nicht verarbeitet.
   gesendet. Anthropic verarbeitet diese gemaess ihrer
   [Datenschutzrichtlinie](https://www.anthropic.com/privacy).
   Anthropic speichert API-Anfragen nicht fuer Trainingszwecke.
+- **Bibelserver (mcp.bibelstudium-mcp.de)** - Fuer exakte Bibelzitate fragt der
+  Bot einen Bibel-Server desselben Betreibers ab. Uebertragen wird nur, was das
+  jeweilige Werkzeug braucht: eine Stellenangabe, ein griechisches oder
+  hebraeisches Wort oder eine gesuchte Wortfolge. Dein vollstaendiger
+  Nachrichtentext, dein Name und deine Telegram-ID gehen dabei nicht mit. Der
+  Dienst protokolliert die einzelnen Abrufe nicht; der vorgelagerte
+  Cloudflare-Tunnel erfasst technische Verbindungsdaten des anfragenden
+  Servers, nicht deine.
 - **Sprachnachrichten** - werden lokal auf dem Server des Betreibers
   transkribiert (whisper.cpp). Audio-Daten verlassen nicht das lokale Netzwerk.
 - **Lokaler Server** - Ein Audit-Log auf dem Server des Betreibers erfasst
@@ -101,6 +109,8 @@ Was passiert mit euren Daten?
 - Nachrichteninhalt wird an Anthropic (USA) gesendet und dort transient
   verarbeitet (nicht dauerhaft gespeichert)
 - Sprachnachrichten werden lokal transkribiert (keine Weitergabe an Dritte)
+- Fuer Bibelzitate wird eine Stellenangabe an den Bibel-Server des Betreibers
+  (mcp.bibelstudium-mcp.de) geschickt, ohne Namen und ohne Telegram-ID
 - Interaktionen werden im lokalen Audit-Log erfasst
 
 Was kann geloescht werden?

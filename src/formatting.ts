@@ -453,7 +453,10 @@ export function formatToolStatus(
     if (toolName.startsWith("mcp__bible__")) {
       const book = toolInput.book ? String(toolInput.book) : "";
       const chapter = toolInput.chapter ? String(toolInput.chapter) : "";
-      const ref = book && chapter ? `${book} ${chapter}` : book;
+      // Word study and search carry no reference, so fall back to what they
+      // do carry (Strong's number, lemma, or the search term).
+      const term = toolInput.strong || toolInput.lemma || toolInput.query;
+      const ref = book && chapter ? `${book} ${chapter}` : book || (term ? String(term) : "");
       if (ref) {
         return `📖 blättert in der Schrift... ${escapeHtml(ref)}`;
       }

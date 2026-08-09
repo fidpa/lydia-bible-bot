@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-08-09
+
+### Added
+- `.github/workflows/lint.yml` — the first CI this repository has ever had. It runs `bun install`, `bun run typecheck` and a bundle build of all three entry points on every push and pull request against `main`, with the same commands the release checklist runs locally. The eleven releases before this one were cut without any automated check.
+
+### Changed
+- Bible data now comes from the hosted [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) endpoint (`https://mcp.bibelstudium-mcp.de/mcp`, verified against server version 0.6.15) instead of the embedded MCP server. Seven read-only tools replace the single `bible_lookup`: verse text, original-language text with morphology, concordance, cross-references, full-text search, edition comparison, server info. Default translation stays Schlachter 2000, and each response carries the attribution its licence requires in `quellen`.
+- `CLAUDE.md`: the available translations are now named correctly (Schlachter 2000, Schlachter 1951, Luther 1912, Elberfelder 1871, Menge 1939). The old entry offered Lutherbibel 2017 and Elberfelder 2006, which no configured source ever delivered. New rules cover the other six tools, the verbatim cap of the Schlachter editions, and the attribution field.
+- `docs/datenschutz.md`: names the Bible endpoint as a data destination. It receives a reference or a search term, never the message text, the name or the Telegram ID.
+- Tool status line in Telegram also shows the subject for word study and search, which carry no book/chapter.
+- `THIRD_PARTY_LICENSES.md`: new "Bible Data" section. Bible text is no longer part of this repository, so the section names the endpoint, the editions it serves and the licence each one carries, and points at that project's own licence table for the original-language, lexicon and cross-reference data.
+
+### Removed
+- `bible_mcp/` (server, one-time download script, book-name aliases) and the setup step that built its local SQLite database. Anyone upgrading from 1.4.x can delete the directory and its `bible_mcp/data/` database; verse lookups now need network access to the endpoint, and without it Lydia says so instead of quoting from memory.
+
 ## [1.4.1] - 2026-08-01
 
 ### Changed
@@ -102,7 +117,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot) (MIT License)
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses, multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.2.3...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.1...v1.5.0
+[1.4.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.2.4...v1.3.0
+[1.2.4]: https://github.com/fidpa/lydia-bible-bot/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/fidpa/lydia-bible-bot/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/fidpa/lydia-bible-bot/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.2.0...v1.2.1

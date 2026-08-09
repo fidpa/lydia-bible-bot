@@ -49,8 +49,15 @@ mcp-config.ts
 # Whisper model files (large binaries)
 models/
 
-# Bible database (copyrighted content, local only - see bible_mcp/download.ts)
+# Leftover local database of the removed embedded Bible server. The rule stays
+# so an old working copy cannot be committed by accident; Bible text now comes
+# from the hosted endpoint and is never stored here.
 bible_mcp/data/
+
+# Local Claude Code workspace (slash commands, local settings). Never published.
+# CLAUDE.md is deliberately NOT listed here: it is the bot's system prompt, a
+# tracked and documented part of the product (see README "Architecture").
+.claude/
 
 # Personal/marketing
 LINKEDIN_POST.md

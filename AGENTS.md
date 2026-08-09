@@ -64,16 +64,27 @@ All config via `.env` (copy from `.env.example`). Key variables:
 
 MCP servers defined in `mcp-config.ts`.
 
-### Bible MCP Server (`bible_mcp/`)
+### Bible Tools (hosted MCP server)
 
-Local MCP server providing exact Bible verse lookups from SQLite.
+Bible data comes from [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) over HTTP,
+configured as the `"bible"` entry in `mcp-config.ts`:
 
-- **`bible_mcp/server.ts`** - MCP server with `bible_lookup` tool
-- **`bible_mcp/download.ts`** - One-time download: fetches Schlachter 2000 from bolls.life → SQLite
-- **`bible_mcp/aliases.ts`** - German book name aliases (Jesaja→23, 1. Mose→1, Röm→45, etc.)
-- **`bible_mcp/data/bible.db`** - SQLite database (~31k verses, ~5 MB, gitignored)
+```ts
+"bible": { type: "http", url: "https://mcp.bibelstudium-mcp.de/mcp" }
+```
 
-Setup: `bun run bible_mcp/download.ts` (one-time), then add `"bible"` server to `mcp-config.ts`.
+Nothing to install and no local database. The endpoint is read-only and exposes seven
+tools, all prefixed `mcp__bible__` inside the Agent SDK: `bible_lookup`, `bible_original`,
+`bible_concordance`, `bible_crossrefs`, `bible_search`, `bible_compare`, `bible_server_info`.
+Its default translation is Schlachter 2000, and every response carries a `quellen` array
+with the attribution the licence requires. Editions with a verbatim cap say so in
+`gekuerzt` and `hinweis`; the persona rules in `CLAUDE.md` tell Lydia to pass that on
+instead of filling the gap from memory.
+
+Two operational facts worth knowing before measuring against the endpoint: Cloudflare
+in front of it rate-limits at roughly 17 requests per 10 seconds (HTTP 429), and a bare
+`curl` needs both `Content-Type: application/json` and
+`Accept: application/json, text/event-stream`, because responses come back as SSE.
 
 ### Runtime Files
 

@@ -39,3 +39,20 @@ mobile devices. The core architecture was adopted:
 - **Session isolation**: Per-chat session management with configurable limits
 - **GDPR documentation**: Privacy notice for Telegram group use (docs/datenschutz.md)
 - **German localization**: Bot messages and documentation in German
+
+## Bible Data
+
+Bible text is not part of this repository. It is fetched at runtime from the
+hosted [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) endpoint
+(`https://mcp.bibelstudium-mcp.de/mcp`, MIT-licensed code). Every response of
+that server carries a `quellen` field naming the work, its licence and the
+attribution the licence requires, and Lydia passes that attribution on whenever
+she quotes the wording.
+
+- **Schlachter 2000** - © 2000 Genfer Bibelgesellschaft, served with their kind
+  permission. The default translation of that endpoint
+- **Schlachter 1951** - CC BY 4.0, © Genfer Bibelgesellschaft
+- **Luther 1912, Elberfelder 1871, Menge 1939** - Public Domain
+- **Original-language editions, lexicon and cross-reference data** - Public
+  Domain or CC-BY(-SA); the full table is in that repository's
+  [THIRD_PARTY_LICENSES.md](https://github.com/fidpa/bibelstudium-mcp/blob/main/THIRD_PARTY_LICENSES.md)

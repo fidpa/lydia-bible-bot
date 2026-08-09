@@ -19,13 +19,13 @@ Security-hardened AI Bible study assistant for Telegram groups, built on [linuz9
 ## Features
 
 - **Security-First** - 13 hardening measures from a documented security audit (see [Security](#security))
-- **Bible Study Focus** - Theological system prompt with citation guidelines, multi-tradition awareness, and copyright-compliant Bible quoting (Schlachter 2000, Elberfelder, Luther 2017)
+- **Bible Study Focus** - Theological system prompt with citation guidelines, multi-tradition awareness, and licence-compliant Bible quoting (Schlachter 2000, Schlachter 1951, Luther 1912, Elberfelder 1871, Menge 1939)
 - **Group Chat Aware** - Only responds when @mentioned or replied to, keeps responses concise in groups
 - **Multi-Modal Input** - Text, voice messages (local whisper.cpp transcription), photos, documents (PDF extraction), video
 - **Streaming Responses** - Live message updates as Claude generates, with tool status indicators
 - **Session Management** - Per-chat sessions with persistence, `/new`, `/stop`, `/resume` commands
-- **Exact Bible Quotes** - Local MCP server with SQLite database for precise verse lookups (Schlachter 2000), never quotes from memory
-- **MCP Integration** - Extensible via Model Context Protocol servers (Bible lookup, ask-user inline keyboard, custom tools)
+- **Exact Bible Quotes** - Verse text comes from the hosted [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) endpoint, never from memory; beyond the verse text it also serves the Hebrew and Greek original with morphology, concordance, cross-references, full-text search and textual-variant comparison
+- **MCP Integration** - Extensible via Model Context Protocol servers (Bible tools over HTTP, ask-user inline keyboard, custom tools)
 - **GDPR Documentation** - Privacy notice for German Telegram groups (see [docs/datenschutz.md](docs/datenschutz.md))
 - **EU AI Act Compliance** - Mandatory AI transparency disclosure in system prompt
 
@@ -63,10 +63,8 @@ bun install
 cp .env.example .env
 # Edit .env with your tokens and user IDs
 
-# Download Bible database (one-time, ~5 MB)
-bun run bible_mcp/download.ts
-
-# Configure MCP servers
+# Configure MCP servers (Bible tools are preconfigured against the
+# hosted bibelstudium-mcp endpoint, no download and no local database)
 cp mcp-config.example.ts mcp-config.ts
 
 # Run
@@ -186,10 +184,6 @@ lydia-bible-bot/
 │       ├── streaming.ts   # Shared streaming state and status callbacks
 │       ├── commands.ts    # Bot command handlers
 │       └── index.ts       # Handler exports
-├── bible_mcp/             # MCP server for exact Bible verse lookups (SQLite)
-│   ├── server.ts          # bible_lookup tool via MCP
-│   ├── download.ts        # One-time Schlachter 2000 download from bolls.life
-│   └── aliases.ts         # German book name aliases (Jesaja→23, 1Mo→1, etc.)
 ├── ask_user_mcp/          # MCP server for interactive Telegram buttons
 ├── scripts/
 │   └── export-chat.ts     # Export a chat transcript to Markdown/Word/PDF
@@ -227,6 +221,8 @@ Telegram → grammY handler → Auth check → Group filter → Rate limit
 **Why `bypassPermissions`?** The bot is designed for mobile use, where confirming every file read or shell command would be impractical. Instead of per-action prompts, security relies on defense-in-depth layers (allowlist, rate limiting, path validation, command safety, audit logging).
 
 **Why string-based command blocking?** Full shell AST parsing is impractical, and OS-level sandboxing (containers, bubblewrap) would be the proper solution. The blocklist is a pragmatic guardrail that catches common destructive patterns while documenting its limitations transparently.
+
+**Why a hosted Bible server instead of an embedded one?** The bot used to ship its own small MCP server with a local SQLite database, which answered verse lookups and nothing else. It now calls the hosted [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) endpoint, which serves the Schlachter 2000 with the kind permission of Genfer Bibelgesellschaft, returns the required attribution with every response, and adds the Hebrew and Greek original with morphology, concordance, cross-references, full-text search and textual-variant comparison. Setup drops a step, because there is no database to build. The price is a network dependency, so when the endpoint is unreachable Lydia has no verse text and says so rather than quoting from memory.
 
 **Why German?** The bot serves a German-speaking Bible study group. The system prompt, privacy documentation, and bot messages are in German. The codebase and technical documentation remain in English.
 

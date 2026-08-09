@@ -19,11 +19,14 @@ export const MCP_SERVERS: Record<
   | { command: string; args?: string[]; env?: Record<string, string> }
   | { type: "http"; url: string; headers?: Record<string, string> }
 > = {
-  // Bible - exact verse lookups from local SQLite (Schlachter 2000)
-  // Setup: bun run bible_mcp/download.ts (one-time)
+  // Bible - exact verse lookups via the hosted bibelstudium-mcp service.
+  // No setup, no local database. Seven read-only tools: verse lookup,
+  // original text, concordance, cross-references, search, edition compare,
+  // server info. Default translation of that endpoint is Schlachter 2000.
+  // Source: https://github.com/fidpa/bibelstudium-mcp
   "bible": {
-    command: "bun",
-    args: ["run", `${REPO_ROOT}/bible_mcp/server.ts`],
+    type: "http",
+    url: "https://mcp.bibelstudium-mcp.de/mcp",
   },
 
   // Ask User - present options as Telegram inline keyboard buttons
