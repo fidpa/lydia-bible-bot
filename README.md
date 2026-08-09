@@ -253,6 +253,9 @@ Marc Allgeier ([@fidpa](https://github.com/fidpa))
 
 ## See Also
 
+- [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) - The Bible MCP server this bot queries: German editions, original-language text with morphology, concordance, cross-references, textual-variant comparison
 - [ubuntu-server-security](https://github.com/fidpa/ubuntu-server-security) - Server hardening (14 components, CIS Benchmark)
 - [step-ca-internal-pki](https://github.com/fidpa/step-ca-internal-pki) - Internal PKI with auto-renewal and monitoring
 - [bash-production-toolkit](https://github.com/fidpa/bash-production-toolkit) - Production-ready Bash libraries
+
+**Looking for an English-language Bible MCP server?** [studybible-mcp](https://github.com/djayatillake/studybible-mcp) is the most-starred one on GitHub (checked August 2026) and solves a different problem: English text, Python, deeper free lexica (BDB, Abbott-Smith, LSJ) and hermeneutics guidance after Fee & Stuart. It is not affiliated with this project.

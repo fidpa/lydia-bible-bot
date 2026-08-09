@@ -29,6 +29,25 @@ export const MCP_SERVERS: Record<
     url: "https://mcp.bibelstudium-mcp.de/mcp",
   },
 
+  // Example: studybible-mcp - English-language alternative, hosted by its
+  // author. Deeper free lexica (BDB, Abbott-Smith, LSJ), a knowledge graph
+  // over people and places, and study notes; 22 tools, English text only.
+  // Not affiliated with this project.
+  // Source: https://github.com/djayatillake/studybible-mcp
+  //
+  // Two caveats before enabling it:
+  //   1. The trailing slash is required. https://studybible-mcp.fly.dev/mcp
+  //      answers 307 and redirects to plain http:// - a protocol downgrade.
+  //   2. Its tools are named word_study, lookup_verse, search_by_strongs and
+  //      so on, not bible_*. The citation rules in CLAUDE.md address the
+  //      bible_* tools by name, so they do not apply to this server until
+  //      you extend them. Without that, Lydia has no rule telling her to
+  //      quote from it rather than from memory.
+  // "studybible": {
+  //   type: "http",
+  //   url: "https://studybible-mcp.fly.dev/mcp/"
+  // },
+
   // Ask User - present options as Telegram inline keyboard buttons
   // Uncomment to enable interactive button prompts
   // "ask-user": {

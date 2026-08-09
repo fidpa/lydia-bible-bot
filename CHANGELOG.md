@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-08-09
+
+### Changed
+- `README.md`: the "See Also" section now names [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp), the Bible MCP server this bot has queried since 1.5.0, and points readers who need English text at [studybible-mcp](https://github.com/djayatillake/studybible-mcp), the most-starred Bible MCP server on GitHub (72 stars, checked 2026-08-09). Neither the endpoint nor the alternative was discoverable from that section before.
+- `mcp-config.example.ts`: commented-out entry for the same English-language server, with the two things that bite in practice. Its hosted endpoint needs the trailing slash, because `/mcp` answers 307 and redirects to plain `http://`, and its 22 tools are named `word_study`, `lookup_verse`, `search_by_strongs` and so on rather than `bible_*`, which means the citation rules in `CLAUDE.md` do not cover them until they are extended.
+
 ## [1.5.0] - 2026-08-09
 
 ### Added
@@ -117,7 +123,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot) (MIT License)
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses, multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.3.1...v1.4.0
