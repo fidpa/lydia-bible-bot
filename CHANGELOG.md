@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-08-11
+
+### Fixed
+- `bun.lock` was refreshed and now matches `package.json`. Its workspace block still recorded `@anthropic-ai/claude-agent-sdk: ^0.1.76` and resolved 0.1.77, the range that 1.3.0 replaced with `^0.3.158` in May; the lockfile had not been regenerated since. It now resolves 0.3.227, with the SDK's platform packages in place of the `sharp` optional dependencies the old version pulled in, and `@anthropic-ai/sdk` 0.116.0 as a new transitive dependency. `grammy`, `zod` and `@modelcontextprotocol/sdk` are unchanged. Verified afterwards: `bun install --frozen-lockfile` reports no changes, `bun run typecheck` and the bundle build of all three entry points pass. One warning remains: the SDK declares a peer dependency on `@modelcontextprotocol/sdk` `^1.29.0`, while this project pins `^1.25.1` and resolves 1.26.0. Nothing observed has broken, and raising that range is a separate change.
+- `.github/workflows/lint.yml` installs with `--frozen-lockfile` again, so CI now fails on a lockfile that has drifted from `package.json` instead of quietly resolving whatever is current. The comment explaining why the flag was omitted is gone with it.
+
 ## [1.5.1] - 2026-08-09
 
 ### Changed
@@ -123,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot) (MIT License)
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses, multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.2...HEAD
+[1.5.2]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.0...v1.4.1
