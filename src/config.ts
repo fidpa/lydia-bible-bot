@@ -43,7 +43,7 @@ export const ALLOWED_USERS: number[] = (
   .filter((x) => !isNaN(x));
 
 export const WORKING_DIR = process.env.CLAUDE_WORKING_DIR || HOME;
-export const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-4-6";
+export const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-5";
 
 // ============== Claude CLI Path ==============
 
@@ -99,6 +99,22 @@ try {
 }
 
 export { MCP_SERVERS };
+
+/**
+ * Tools that must never be offered, even though their server provides them.
+ *
+ * Empty by default: `mcp-config.example.ts` configures exactly one Bible
+ * server, so there is nothing to disambiguate. The list exists for the case
+ * where a second one is added (the commented-out `studybible` entry, or a
+ * local fallback server). Two servers mean two plausible candidates for the
+ * same question, and the weaker answer is indistinguishable from the better
+ * one once it arrives. Naming the redundant tools here is the reliable fix:
+ * a tool name is read at selection time, whereas a rule in the system prompt
+ * can be passed over.
+ *
+ * Entries are full SDK tool names, e.g. `mcp__studybible__lookup_verse`.
+ */
+export const DISALLOWED_TOOLS: string[] = [];
 
 // ============== Security Configuration ==============
 

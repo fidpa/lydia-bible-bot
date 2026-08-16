@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.3] - 2026-08-16
+
+### Changed
+- Default model is now `claude-sonnet-5` (was `claude-sonnet-4-6`). The variable was undocumented before; `CLAUDE_MODEL` is now listed in `.env.example`, `README.md` ("Configuration") and `AGENTS.md`.
+- Thinking is no longer steered by a fixed token budget. `maxThinkingTokens` (0 / 10,000 / 50,000) is replaced by `thinking: { type: "adaptive" }` plus an `effort` level, so the model decides when to think and the keyword tiers only set how deep: no match → `low`, `THINKING_KEYWORDS` → `high`, `THINKING_DEEP_KEYWORDS` → `xhigh`. The `/status` label (`off` / `normal` / `deep`) is unchanged. `.env.example` no longer advertises "50k tokens" for the deep tier.
+- Bible tool status lines in Telegram now distinguish the two kinds of lookup: `bible_lookup`/`_search`/`_crossrefs` render as `📖 blättert in der Schrift...`, while `bible_original`/`_concordance`/`_compare` render as `📜 prüft den Grundtext...`. Before, all six shared one line. The match is now on the tool name rather than the server prefix, since one server serves both, and both the `mcp__bible__` and `mcp__bibelstudium__` prefixes are recognised, so renaming the server key in `mcp-config.ts` or adding a second Bible server no longer silently falls back to the generic MCP format. `bible_search` now shows its search term again, which the shared branch had lost.
+- Dependency bumps: `@anthropic-ai/claude-agent-sdk` `^0.3.158` → `^0.3.233` (required for `effort` and adaptive thinking), `@modelcontextprotocol/sdk` `^1.25.1` → `^1.30.0`, `grammy` `^1.38.4` → `^1.45.1`, `zod` `^4.2.1` → `^4.4.3`, `typescript` peer range `^5` → `^5.9.3`. This clears the peer-dependency warning noted in 1.5.2: the SDK asks for `@modelcontextprotocol/sdk` `^1.29.0` and now gets 1.30.0. Verified with the CI commands: `bun install --frozen-lockfile` reports no changes, `bun run typecheck` passes, and the bundle build of all three entry points succeeds.
+
+### Added
+- `DISALLOWED_TOOLS` in `src/config.ts`, wired to the SDK's `disallowedTools` option. Empty by default, since only one Bible server is configured. It exists for the case where a second one is enabled: two servers mean two plausible candidates for the same question, and the weaker answer is indistinguishable from the better one once it arrives. Blocking the redundant tools by name is reliable in a way a system-prompt rule is not.
+- `AGENTS.md`: the Bible tool section now documents each of the seven tools in full instead of only naming them. It covers the response fields that decide whether a citation is complete or silently truncated (`gekuerzt`, `abschnitt_gekuerzt`, `verse_einzeln`, `fussnoten`), and the four traps that cost time when read wrong: `treffer` counts verses rather than word occurrences, `kjv_woerter` describes the King James rather than the original-language word, a missing `bezeugung` means "no data" rather than "unattested", and STEPBible's "Byz" is not the same text as the byzantine edition the same call returns. Adds a section on the four MCP resources, with `bible://uebersetzungen` named as the authority for which edition requires which attribution.
+- `AGENTS.md`: "Architecture Decisions" and "Gotchas & Anti-Patterns" sections, documenting the handler guard sequence, the streaming state machine, sequentialize bypasses, the file-based ask_user IPC, and seven behaviours that are easy to break by accident (among them that a single `*` becomes bold in `markdownToHtml` but italic in `inlineToHtml`, and that chunk splitting can cut an HTML tag in half).
+- `docs/sessions.md`: "Claude-Authentifizierung" section covering CLI OAuth versus `ANTHROPIC_API_KEY`, how to switch accounts, and where the token is (and is not) stored.
+
 ## [1.5.2] - 2026-08-11
 
 ### Fixed
@@ -129,7 +143,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [linuz90/claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot) (MIT License)
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses, multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.2...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.3...HEAD
+[1.5.3]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/fidpa/lydia-bible-bot/compare/v1.4.1...v1.5.0

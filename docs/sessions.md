@@ -51,6 +51,32 @@ Sessions werden in `~/.lydia-bibel-bot/sessions.json` gespeichert und
 koennen nach einem Bot-Neustart mit `/resume` wiederhergestellt werden.
 Es werden maximal 5 Sessions pro User aufbewahrt.
 
+## Claude-Authentifizierung
+
+Standardmaessig authentifiziert sich der Bot ueber den **OAuth-Token der
+Claude Code CLI**, nicht ueber einen API-Key in der `.env`.
+
+Genutzt wird der Token implizit beim `query()`-Aufruf, weil die SDK-Options
+`settingSources: ["user", "project"]` setzen (`src/session.ts`). Dadurch liest
+das SDK die Anmeldedaten des Nutzers, unter dem der Bot-Prozess laeuft.
+
+**Account wechseln:**
+
+```bash
+claude logout   # loescht den OAuth-Token
+claude login    # Browser-Flow mit einem anderen Anthropic-Account
+```
+
+Danach den Bot neu starten, damit der Wechsel greift.
+
+**Wo liegt der Token?** Nicht in der `.env` und nicht im Repository. Die Claude
+Code CLI verwaltet ihn selbst, `claude logout` entfernt ihn vollstaendig.
+
+**Alternative per API-Key:** `ANTHROPIC_API_KEY=sk-ant-api03-...` in der `.env`
+(siehe `.env.example`). Dann wird pro Token abgerechnet statt ueber ein
+bestehendes Abo. Sinnvoll nur dort, wo keine CLI-Authentifizierung zur
+Verfuegung steht, etwa auf einem Server ohne interaktiven Login.
+
 ## CLAUDE.md und Sessions
 
 Die CLAUDE.md (System-Prompt) wird bei **jedem** `query()`-Aufruf neu

@@ -93,6 +93,7 @@ All configuration via environment variables (see [.env.example](.env.example)):
 | `TELEGRAM_BOT_TOKEN` | Yes | Bot token from @BotFather |
 | `TELEGRAM_ALLOWED_USERS` | Yes | Comma-separated Telegram user IDs |
 | `CLAUDE_WORKING_DIR` | Recommended | Working directory for Claude (loads CLAUDE.md) |
+| `CLAUDE_MODEL` | Optional | Model id (default: `claude-sonnet-5`) |
 | `WHISPER_MODE` | Optional | `local` (default) or `off` for voice transcription mode |
 | `WHISPER_MODEL_PATH` | Optional | Path to GGML whisper model (default: `models/ggml-*.bin`) |
 | `ALLOWED_PATHS` | Optional | Directories Claude can access (default: working dir, ~/Documents, ~/Downloads, ~/Desktop) |

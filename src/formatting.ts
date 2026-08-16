@@ -449,14 +449,44 @@ export function formatToolStatus(
   }
 
   if (toolName.startsWith("mcp__")) {
-    // Bible MCP — custom Lydia-style status
-    if (toolName.startsWith("mcp__bible__")) {
+    // Bible MCP — custom Lydia-style status.
+    //
+    // Split by tool name, not by server prefix: the same server serves both the
+    // German wording and the original-language text, and the two deserve
+    // different lines. bible_lookup/_search/_crossrefs are "the Scripture",
+    // bible_original/_concordance/_compare are "the original text".
+    // Both prefixes are matched so the lines survive renaming the server key in
+    // mcp-config.ts or adding a second Bible server.
+    const isBibleServer =
+      toolName.startsWith("mcp__bible__") ||
+      toolName.startsWith("mcp__bibelstudium__");
+
+    if (isBibleServer) {
+      const isOriginalTextTool =
+        toolName.endsWith("__bible_original") ||
+        toolName.endsWith("__bible_concordance") ||
+        toolName.endsWith("__bible_compare");
+
       const book = toolInput.book ? String(toolInput.book) : "";
       const chapter = toolInput.chapter ? String(toolInput.chapter) : "";
-      // Word study and search carry no reference, so fall back to what they
-      // do carry (Strong's number, lemma, or the search term).
-      const term = toolInput.strong || toolInput.lemma || toolInput.query;
-      const ref = book && chapter ? `${book} ${chapter}` : book || (term ? String(term) : "");
+
+      if (isOriginalTextTool) {
+        // Concordance and compare carry a word rather than a reference.
+        const word = toolInput.strong || toolInput.lemma;
+        const ref = word
+          ? String(word)
+          : book && chapter
+          ? `${book} ${chapter}`
+          : book;
+        if (ref) {
+          return `📜 prüft den Grundtext... ${escapeHtml(ref)}`;
+        }
+        return "📜 prüft den Grundtext...";
+      }
+
+      // bible_search knows no book/chapter, only the search term.
+      const query = toolInput.query ? String(toolInput.query) : "";
+      const ref = query ? query : book && chapter ? `${book} ${chapter}` : book;
       if (ref) {
         return `📖 blättert in der Schrift... ${escapeHtml(ref)}`;
       }

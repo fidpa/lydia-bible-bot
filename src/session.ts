@@ -7,6 +7,7 @@
 
 import {
   query,
+  type EffortLevel,
   type Options,
   type SDKMessage,
 } from "@anthropic-ai/claude-agent-sdk";
@@ -15,6 +16,7 @@ import type { Context } from "grammy";
 import {
   ALLOWED_PATHS,
   CLAUDE_MODEL,
+  DISALLOWED_TOOLS,
   MCP_SERVERS,
   SAFETY_PROMPT,
   SESSION_FILE,
@@ -35,23 +37,27 @@ import type {
 } from "./types";
 
 /**
- * Determine thinking token budget based on message keywords.
+ * Determine reasoning effort based on message keywords.
+ *
+ * Since Sonnet 5 there is no fixed thinking budget any more: the model thinks
+ * adaptively and decides for itself when and how much. What is still steered
+ * from here is the depth, through the effort level.
  */
-function getThinkingLevel(message: string): number {
+function getEffortLevel(message: string): EffortLevel {
   const msgLower = message.toLowerCase();
 
   // Check deep thinking triggers first (more specific)
   if (THINKING_DEEP_KEYWORDS.some((k) => msgLower.includes(k))) {
-    return 50000;
+    return "xhigh";
   }
 
   // Check normal thinking triggers
   if (THINKING_KEYWORDS.some((k) => msgLower.includes(k))) {
-    return 10000;
+    return "high";
   }
 
-  // Default: no thinking
-  return 0;
+  // Default: short paths, the model decides on its own when to think
+  return "low";
 }
 
 /**
@@ -188,10 +194,10 @@ class ClaudeSession {
     );
 
     const isNewSession = !this.isActive;
-    const thinkingTokens = getThinkingLevel(message);
-    const thinkingLabel =
-      { 0: "off", 10000: "normal", 50000: "deep" }[thinkingTokens] ||
-      String(thinkingTokens);
+    const effort = getEffortLevel(message);
+    const thinkingLabel = { low: "off", high: "normal", xhigh: "deep" }[
+      effort as "low" | "high" | "xhigh"
+    ];
 
     // Inject current date/time at session start so Claude doesn't need to call a tool for it
     let messageToSend = message;
@@ -221,7 +227,11 @@ class ClaudeSession {
       allowDangerouslySkipPermissions: true,
       systemPrompt: SAFETY_PROMPT,
       mcpServers: MCP_SERVERS,
-      maxThinkingTokens: thinkingTokens,
+      // Empty by default. The rationale, and when to fill it, is documented at
+      // DISALLOWED_TOOLS in src/config.ts.
+      disallowedTools: DISALLOWED_TOOLS,
+      thinking: { type: "adaptive" },
+      effort,
       additionalDirectories: ALLOWED_PATHS,
       resume: this.sessionId || undefined,
     };
