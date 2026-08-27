@@ -7,19 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.5.4] - 2026-08-27: Release notes rewritten to lead with effect, and three wrong numbers corrected
+## [1.5.5] - 2026-08-27: Removal entries stop pointing at the history, and the editorial section states what holds
+
+An entry about material that should never have been public can end up describing where it
+still is. The file leaves the working tree but stays in the history, so a note about what
+remains reachable turns a missed artefact into a signposted one. A release page has the
+same problem with its own bookkeeping: how long something was wrong, and how many statements
+a check did not survive, address the maintainer rather than the reader, and they crowd out
+the corrections themselves.
+
+Nothing in the bot changed. No handler, command, environment variable or measured value is
+touched; a running deployment needs no action.
+
+### Changed
+- **Entries about removed material name what went and why, and stop there.** Where an entry
+  described a file taken out of the repository, the notes on where it can still be found are
+  gone. What was removed, and why it did not belong in a public showcase, is unchanged.
+- **The `[1.5.4]` section opens with what was put right, not with a count of what was
+  wrong.** Its introduction no longer carries the number of entries the pass rewrote, the
+  number of figures that did not hold, or the span of time they had stood. Every correction
+  stays where it was, as its own entry with its effect and its anchor in the code. The
+  headline carried the tally as well; the published title of `v1.5.4` was set to match.
+
+### Upgrade notes
+
+Nothing to do. This release changes changelog text only.
+
+## [1.5.4] - 2026-08-27: Release notes rewritten to lead with effect
 
 Every entry in this file was rewritten against the release-message rules this portfolio
 works to: each entry now opens with a bold line that says what changes for an operator, the
 implementation follows in the paragraph below it, and every entry about code names a file,
-function or config variable. Before this pass, none of the 61 entries had a bold line at all.
+function or config variable.
 
-The rewrite also checked the numbers, and three of them did not hold. Two had been public
-since February 2026, one since August. They are corrected below and listed here because a
-correction that is not announced is indistinguishable from a silent edit.
+The rewrite also checked the numbers against the code and the tags they describe; they are
+corrected below where the repository contradicted them, listed rather than silently fixed.
 
-No measured value, path or function name was changed other than the three corrections named
-here. Version 1.2.4 received the section it never had.
+No measured value, path or function name was changed other than the corrections named here.
+Version 1.2.4 received the section it never had.
 
 ### Fixed
 - **The security audit arithmetic did not add up, and said so on the release page since February.**
@@ -228,8 +253,7 @@ touches it is 14.6. The prompt was the source of the tic, so the prompt is where
 
 ### Removed
 - **`docs/bible-mcp-research.md`**, internal research and planning notes that were not
-  intended for a public showcase. The file stays reachable through earlier commits and tags;
-  history was left untouched deliberately.
+  intended for a public showcase.
 
 ## [1.4.0] - 2026-06-27: Chat transcripts export to Markdown, Word and PDF
 
@@ -266,8 +290,7 @@ in several places, including a changelog that skipped five releases.
 ### Added
 - **`docs/sessions.md`**, documenting how session state behaves.
 - **`docs/lydia-quellen.md`**, the biblical sources behind the Lydia persona.
-- **`docs/bible-mcp-research.md`**, Bible API research and implementation notes. Removed
-  again in 1.4.1 as internal material.
+- **`docs/bible-mcp-research.md`**, Bible API research and implementation notes.
 
 ### Fixed
 - **The changelog covers every released version except this one.** The 1.1.0 to 1.2.3
@@ -408,7 +431,8 @@ unrestricted agent, and `docs/security-limitations.md` says where they stop.
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses,
   multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.4...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.5...HEAD
+[1.5.5]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.4...v1.5.5
 [1.5.4]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.3...v1.5.4
 [1.5.3]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.2...v1.5.3
 [1.5.2]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.1...v1.5.2
