@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.6] - 2026-08-29: The README counts what the audit record counts
+
+The README claimed a hardening number no source in the repository backs, and its
+configuration table missed seven variables that `.env.example` documents. Both
+now match the repository's own records. Nothing in the bot changed; a running
+deployment needs no action.
+
+### Fixed
+
+- **The unsourced "13 hardening measures" is gone from all three places it
+  appeared.** No count in the repository arrives at 13: the audit record in
+  `docs/security-limitations.md` says 17 findings, 17/17 addressed, 7 of them
+  with known limitations, and the README's own Security section enumerates six
+  layers plus five additional measures. The intro, the feature list, and the
+  credits now cite those two counts and nothing else
+- **The configuration table lists every variable from `.env.example`.**
+  `ANTHROPIC_API_KEY`, `AUDIT_LOG_JSON`, `CLAUDE_CLI_PATH`,
+  `RATE_LIMIT_ENABLED`, `THINKING_KEYWORDS`, `THINKING_DEEP_KEYWORDS`, and
+  `WHISPER_CLI_PATH` were documented there but missing from the table
+
+### Changed
+
+- **Wording and typography pass against the workbench README quality
+  standards.** The problem-intro template reads as plain prose, the
+  "Security-First" feature label states the factual count instead of a slogan,
+  feature and see-also separators are unified to colons, and arrows and
+  copyright signs are plain ASCII. Content unchanged beyond the count fixes
+  above
+
 ## [1.5.5] - 2026-08-27: Removal entries stop pointing at the history, and the editorial section states what holds
 
 An entry about material that should never have been public can end up describing where it
@@ -431,7 +460,8 @@ unrestricted agent, and `docs/security-limitations.md` says where they stop.
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses,
   multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.5...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.6...HEAD
+[1.5.6]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.5...v1.5.6
 [1.5.5]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.4...v1.5.5
 [1.5.4]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.3...v1.5.4
 [1.5.3]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.2...v1.5.3

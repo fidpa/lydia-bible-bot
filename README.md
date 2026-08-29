@@ -14,20 +14,20 @@ Security-hardened AI Bible study assistant for Telegram groups, built on [linuz9
 
 > Profile image AI-generated with DALL-E (OpenAI), see [Lydia sources](docs/lydia-quellen.md#profilbild).
 
-**The Problem**: Running an AI assistant in a Telegram group requires more than just connecting an API. The upstream project provides an excellent foundation for controlling Claude Code via Telegram, but deploying it for a group of users demands systematic security hardening: rate limiting, path validation, command safety checks, prompt injection defenses, and audit logging. After conducting a full security audit and implementing 13 hardening measures, this repository documents the entire process transparently, including the limitations that remain.
+Running an AI assistant in a Telegram group requires more than just connecting an API. The upstream project provides an excellent foundation for controlling Claude Code via Telegram, but deploying it for a group of users demands systematic security hardening: rate limiting, path validation, command safety checks, prompt injection defenses, and audit logging. After a full security audit (17 findings, 17/17 addressed, 7 of them with documented limitations), this repository documents the entire process transparently, including the limitations that remain.
 
 ## Features
 
-- **Security-First** - 13 hardening measures from a documented security audit (see [Security](#security))
-- **Bible Study Focus** - Theological system prompt with citation guidelines, multi-tradition awareness, and licence-compliant Bible quoting (Schlachter 2000, Schlachter 1951, Luther 1912, Elberfelder 1871, Menge 1939)
-- **Group Chat Aware** - Only responds when @mentioned or replied to, keeps responses concise in groups
-- **Multi-Modal Input** - Text, voice messages (local whisper.cpp transcription), photos, documents (PDF extraction), video
-- **Streaming Responses** - Live message updates as Claude generates, with tool status indicators
-- **Session Management** - Per-chat sessions with persistence, `/new`, `/stop`, `/resume` commands
-- **Exact Bible Quotes** - Verse text comes from the hosted [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) endpoint, never from memory; beyond the verse text it also serves the Hebrew and Greek original with morphology, concordance, cross-references, full-text search and textual-variant comparison
-- **MCP Integration** - Extensible via Model Context Protocol servers (Bible tools over HTTP, ask-user inline keyboard, custom tools)
-- **GDPR Documentation** - Privacy notice for German Telegram groups (see [docs/datenschutz.md](docs/datenschutz.md))
-- **EU AI Act Compliance** - Mandatory AI transparency disclosure in system prompt
+- **Security hardening**: six defense-in-depth layers plus five additional measures from a documented audit (see [Security](#security))
+- **Bible Study Focus**: Theological system prompt with citation guidelines, multi-tradition awareness, and licence-compliant Bible quoting (Schlachter 2000, Schlachter 1951, Luther 1912, Elberfelder 1871, Menge 1939)
+- **Group Chat Aware**: Only responds when @mentioned or replied to, keeps responses concise in groups
+- **Multi-Modal Input**: Text, voice messages (local whisper.cpp transcription), photos, documents (PDF extraction), video
+- **Streaming Responses**: Live message updates as Claude generates, with tool status indicators
+- **Session Management**: Per-chat sessions with persistence, `/new`, `/stop`, `/resume` commands
+- **Exact Bible Quotes**: Verse text comes from the hosted [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) endpoint, never from memory; beyond the verse text it also serves the Hebrew and Greek original with morphology, concordance, cross-references, full-text search and textual-variant comparison
+- **MCP Integration**: Extensible via Model Context Protocol servers (Bible tools over HTTP, ask-user inline keyboard, custom tools)
+- **GDPR Documentation**: Privacy notice for German Telegram groups (see [docs/datenschutz.md](docs/datenschutz.md))
+- **EU AI Act Compliance**: Mandatory AI transparency disclosure in system prompt
 
 ## Known Limitations
 
@@ -94,12 +94,19 @@ All configuration via environment variables (see [.env.example](.env.example)):
 | `TELEGRAM_ALLOWED_USERS` | Yes | Comma-separated Telegram user IDs |
 | `CLAUDE_WORKING_DIR` | Recommended | Working directory for Claude (loads CLAUDE.md) |
 | `CLAUDE_MODEL` | Optional | Model id (default: `claude-sonnet-5`) |
+| `CLAUDE_CLI_PATH` | Optional | Path to the Claude CLI (auto-detected from `PATH`) |
 | `WHISPER_MODE` | Optional | `local` (default) or `off` for voice transcription mode |
 | `WHISPER_MODEL_PATH` | Optional | Path to GGML whisper model (default: `models/ggml-*.bin`) |
+| `WHISPER_CLI_PATH` | Optional | Path to the `whisper-cli` binary (auto-detected from `PATH`) |
 | `ALLOWED_PATHS` | Optional | Directories Claude can access (default: working dir, ~/Documents, ~/Downloads, ~/Desktop) |
+| `RATE_LIMIT_ENABLED` | Optional | Enable rate limiting (default: `true`) |
 | `RATE_LIMIT_REQUESTS` | Optional | Requests per window (default: 20) |
 | `RATE_LIMIT_WINDOW` | Optional | Window in seconds (default: 60) |
 | `AUDIT_LOG_PATH` | Optional | Audit log location (default: ~/.lydia-bibel-bot/audit.log) |
+| `AUDIT_LOG_JSON` | Optional | JSON format for audit logs (default: `true`) |
+| `THINKING_KEYWORDS` | Optional | Keywords raising reasoning effort to `high` |
+| `THINKING_DEEP_KEYWORDS` | Optional | Keywords raising reasoning effort to `xhigh` |
+| `ANTHROPIC_API_KEY` | Optional | API key (alternative to Claude CLI auth) |
 
 MCP servers are configured in `mcp-config.ts` (see [mcp-config.example.ts](mcp-config.example.ts)).
 
@@ -170,12 +177,12 @@ lydia-bible-bot/
 │   ├── config.ts          # Environment parsing, MCP loading, safety prompts
 │   ├── session.ts         # ClaudeSession class (Agent SDK, streaming, persistence)
 │   ├── security.ts        # RateLimiter, path validation, command safety
-│   ├── formatting.ts      # Markdown → Telegram HTML conversion
+│   ├── formatting.ts      # Markdown -> Telegram HTML conversion
 │   ├── utils.ts           # Audit logging, voice transcription, typing indicators
 │   ├── types.ts           # Shared TypeScript types
 │   └── handlers/
 │       ├── text.ts        # Text messages with group mention filtering
-│       ├── voice.ts       # Voice → local whisper-cli transcription → Claude
+│       ├── voice.ts       # Voice -> local whisper-cli transcription -> Claude
 │       ├── photo.ts       # Image analysis with media group buffering
 │       ├── document.ts    # PDF extraction, text files, archives
 │       ├── audio.ts       # Audio file transcription
@@ -201,8 +208,8 @@ lydia-bible-bot/
 ### Message Flow
 
 ```
-Telegram → grammY handler → Auth check → Group filter → Rate limit
-    → ClaudeSession (Agent SDK) → Streaming response → Audit log → Telegram
+Telegram -> grammY handler -> Auth check -> Group filter -> Rate limit
+    -> ClaudeSession (Agent SDK) -> Streaming response -> Audit log -> Telegram
 ```
 
 ### Tech Stack
@@ -235,28 +242,28 @@ Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guideli
 
 This project is a derivative work based on [claude-telegram-bot](https://github.com/linuz90/claude-telegram-bot) by [Fabrizio Rinaldi](https://github.com/linuz90), licensed under the MIT License.
 
-The original project provides the Telegram-to-Claude-Code bridge architecture. This derivative adds domain specialization (Bible study), systematic security hardening (13 measures from a documented audit), group chat filtering, GDPR documentation, and German localization.
+The original project provides the Telegram-to-Claude-Code bridge architecture. This derivative adds domain specialization (Bible study), systematic security hardening (17 audit findings addressed), group chat filtering, GDPR documentation, and German localization.
 
 See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for full attribution details.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE)
+MIT License, see [LICENSE](LICENSE)
 
-© 2025 [Fabrizio Rinaldi](https://github.com/linuz90) (original)<br>
-© 2026 [Marc Allgeier](https://github.com/fidpa) (derivative)
+(c) 2025 [Fabrizio Rinaldi](https://github.com/linuz90) (original)<br>
+(c) 2026 [Marc Allgeier](https://github.com/fidpa) (derivative)
 
 ## Author
 
 Marc Allgeier ([@fidpa](https://github.com/fidpa))
 
-**Why I Built This**: I wanted a Bible study assistant for our Telegram group that goes beyond a simple API wrapper. The upstream project gave me the foundation, but deploying an AI agent with `bypassPermissions` for multiple users required a systematic security approach. The audit uncovered 17 findings, all addressed through 13 hardening measures, with 7 architectural limitations documented transparently. This project demonstrates that security work is as much about honest documentation as it is about writing code.
+**Why I Built This**: I wanted a Bible study assistant for our Telegram group that goes beyond a simple API wrapper. The upstream project gave me the foundation, but deploying an AI agent with `bypassPermissions` for multiple users required a systematic security approach. The audit uncovered 17 findings; all 17 were addressed, 7 of them with architectural limitations documented transparently. This project demonstrates that security work is as much about honest documentation as it is about writing code.
 
 ## See Also
 
-- [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp) - The Bible MCP server this bot queries: German editions, original-language text with morphology, concordance, cross-references, textual-variant comparison
-- [ubuntu-server-security](https://github.com/fidpa/ubuntu-server-security) - Server hardening (14 components, CIS Benchmark)
-- [step-ca-internal-pki](https://github.com/fidpa/step-ca-internal-pki) - Internal PKI with auto-renewal and monitoring
-- [bash-production-toolkit](https://github.com/fidpa/bash-production-toolkit) - Production-ready Bash libraries
+- [bibelstudium-mcp](https://github.com/fidpa/bibelstudium-mcp): The Bible MCP server this bot queries: German editions, original-language text with morphology, concordance, cross-references, textual-variant comparison
+- [ubuntu-server-security](https://github.com/fidpa/ubuntu-server-security): Server hardening (14 components, CIS Benchmark)
+- [step-ca-internal-pki](https://github.com/fidpa/step-ca-internal-pki): Internal PKI with auto-renewal and monitoring
+- [bash-production-toolkit](https://github.com/fidpa/bash-production-toolkit): Production-ready Bash libraries
 
 **Looking for an English-language Bible MCP server?** [studybible-mcp](https://github.com/djayatillake/studybible-mcp) is the most-starred one on GitHub (checked August 2026) and solves a different problem: English text, Python, deeper free lexica (BDB, Abbott-Smith, LSJ) and hermeneutics guidance after Fee & Stuart. It is not affiliated with this project.
