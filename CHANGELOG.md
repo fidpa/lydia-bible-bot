@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.7] - 2026-10-30: The bot runs the installed Claude CLI
+
+The bot located the installed `claude` binary at startup and then never used it.
+Unless `CLAUDE_CODE_PATH` was set, every query ran on the Claude Code binary
+bundled with the Agent SDK, which only changes with an SDK release. It now runs the installed one, which updates itself.
+A deployment with `claude` on its `PATH` switches to that binary on the next
+restart; one without keeps the bundled binary as before.
+
+### Fixed
+
+- **`CLAUDE_CLI_PATH` now decides which Claude CLI runs, as documented.**
+  `src/config.ts` resolved the path from `CLAUDE_CLI_PATH` or `PATH`, but
+  `src/session.ts` passed `pathToClaudeCodeExecutable` only from
+  `CLAUDE_CODE_PATH`, so the resolved path was dead and the SDK always started
+  its bundled binary. That binary rejects models released after the SDK: on a
+  running deployment, the bundled Claude Code 2.1.233 answered requests for
+  `claude-opus-5-5` with HTTP 400 on 2026-10-30. The session now passes the
+  resolved path. `CLAUDE_CODE_PATH` keeps working as a fallback name for the same
+  setting. When neither variable is set and `claude` is not on `PATH`, the path
+  stays unset and the SDK uses its bundled binary. The hard-coded
+  `/usr/local/bin/claude` fallback is gone: now that the path reaches the SDK, it
+  would point it at a binary that need not exist there
+- **`.env.example` and the README configuration table say what the variable
+  controls**, including the fallback to the bundled binary
+
+### Changed
+
+- **`@anthropic-ai/claude-agent-sdk` goes from `^0.3.233` to `^0.3.314`.** The
+  lockfile resolves 0.3.314, which bundles Claude Code 2.1.314 for deployments
+  without an installed CLI. No other dependency changed. Verified with the CI
+  commands: `bun install --frozen-lockfile` reports no changes, `bun run
+  typecheck` passes, and the bundle build of all three entry points succeeds
+
 ## [1.5.6] - 2026-08-29: The README counts what the audit record counts
 
 The README claimed a hardening number no source in the repository backs, and its
@@ -460,7 +493,8 @@ unrestricted agent, and `docs/security-limitations.md` says where they stop.
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses,
   multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.6...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.7...HEAD
+[1.5.7]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.6...v1.5.7
 [1.5.6]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.5...v1.5.6
 [1.5.5]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.4...v1.5.5
 [1.5.4]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.3...v1.5.4

@@ -94,7 +94,7 @@ All configuration via environment variables (see [.env.example](.env.example)):
 | `TELEGRAM_ALLOWED_USERS` | Yes | Comma-separated Telegram user IDs |
 | `CLAUDE_WORKING_DIR` | Recommended | Working directory for Claude (loads CLAUDE.md) |
 | `CLAUDE_MODEL` | Optional | Model id (default: `claude-sonnet-5`) |
-| `CLAUDE_CLI_PATH` | Optional | Path to the Claude CLI (auto-detected from `PATH`) |
+| `CLAUDE_CLI_PATH` | Optional | Path to the Claude CLI the bot runs (auto-detected from `PATH`; without one, the SDK's bundled binary) |
 | `WHISPER_MODE` | Optional | `local` (default) or `off` for voice transcription mode |
 | `WHISPER_MODEL_PATH` | Optional | Path to GGML whisper model (default: `models/ggml-*.bin`) |
 | `WHISPER_CLI_PATH` | Optional | Path to the `whisper-cli` binary (auto-detected from `PATH`) |

@@ -15,6 +15,7 @@ import { readFileSync, unlinkSync } from "fs";
 import type { Context } from "grammy";
 import {
   ALLOWED_PATHS,
+  CLAUDE_CLI_PATH,
   CLAUDE_MODEL,
   DISALLOWED_TOOLS,
   MCP_SERVERS,
@@ -236,9 +237,9 @@ class ClaudeSession {
       resume: this.sessionId || undefined,
     };
 
-    // Add Claude Code executable path if set (required for standalone builds)
-    if (process.env.CLAUDE_CODE_PATH) {
-      options.pathToClaudeCodeExecutable = process.env.CLAUDE_CODE_PATH;
+    // Installed claude instead of the SDK's bundled binary (see config.ts)
+    if (CLAUDE_CLI_PATH) {
+      options.pathToClaudeCodeExecutable = CLAUDE_CLI_PATH;
     }
 
     if (this.sessionId && !isNewSession) {

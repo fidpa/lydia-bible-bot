@@ -47,17 +47,16 @@ export const CLAUDE_MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-5";
 
 // ============== Claude CLI Path ==============
 
-// Auto-detect from PATH, or use environment override
-function findClaudeCli(): string {
-  const envPath = process.env.CLAUDE_CLI_PATH;
+// Auto-detect from PATH, or use environment override. The installed claude
+// updates itself, while the binary bundled with the Agent SDK falls behind with
+// every new model (it rejects models newer than the SDK release with a 400).
+// Only when none is found does the bot fall back to the bundled one.
+function findClaudeCli(): string | undefined {
+  const envPath = process.env.CLAUDE_CLI_PATH || process.env.CLAUDE_CODE_PATH;
   if (envPath) return envPath;
 
   // Try to find claude in PATH using Bun.which
-  const whichResult = Bun.which("claude");
-  if (whichResult) return whichResult;
-
-  // Final fallback
-  return "/usr/local/bin/claude";
+  return Bun.which("claude") ?? undefined;
 }
 
 export const CLAUDE_CLI_PATH = findClaudeCli();
