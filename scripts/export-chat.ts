@@ -593,7 +593,7 @@ function buildReferenceDocx(
     console.error(`  Fetching reference template failed: ${def.stderr.toString().trim()}`);
     return null;
   }
-  Bun.write(refPath, def.stdout);
+  writeFileSync(refPath, def.stdout);
 
   // 2. Extract styles.xml
   const unz = Bun.spawnSync(
@@ -707,7 +707,7 @@ function main(): void {
   const base = args.name ?? `${datePart}_${slugify(heading)}`;
   const mdPath = join(args.outDir, `${base}.md`);
 
-  Bun.write(mdPath, markdown);
+  writeFileSync(mdPath, markdown, "utf-8");
   console.log(`\n✅ Markdown: ${mdPath}`);
   if (args.color) {
     console.log(

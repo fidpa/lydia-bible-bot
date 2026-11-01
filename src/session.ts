@@ -11,7 +11,7 @@ import {
   type Options,
   type SDKMessage,
 } from "@anthropic-ai/claude-agent-sdk";
-import { readFileSync, unlinkSync } from "fs";
+import { readFileSync, unlinkSync, writeFileSync } from "fs";
 import type { Context } from "grammy";
 import {
   ALLOWED_PATHS,
@@ -548,7 +548,7 @@ class ClaudeSession {
       history.sessions = history.sessions.slice(0, MAX_SESSIONS);
 
       // Save
-      Bun.write(SESSION_FILE, JSON.stringify(history, null, 2));
+      writeFileSync(SESSION_FILE, JSON.stringify(history, null, 2));
       console.log(`Session saved to ${SESSION_FILE}`);
     } catch (error) {
       console.warn(`Failed to save session: ${error}`);

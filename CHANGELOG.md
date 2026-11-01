@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.8] - 2026-11-01: Files are on disk before the next step reads them
+
+Three writes started without waiting for the file to be complete. Two of them fed
+the file straight to another program in the export script, the third reported the
+session history as saved before it was. All three now write synchronously. A
+running deployment picks up the session fix on the next restart; the export
+script needs nothing.
+
+### Fixed
+
+- **`scripts/export-chat.ts` finishes writing the Markdown file and the Word
+  reference template before pandoc and unzip read them.** Both writes used
+  `Bun.write` without `await` inside the synchronous `main()`, and the next step
+  started a child process on the same path with `Bun.spawnSync`. Nothing
+  guaranteed the bytes were on disk by then, so pandoc could read an incomplete
+  Markdown file and unzip an incomplete `reference.docx`, which shows up as an
+  occasional empty or failed export. Both calls now use `writeFileSync`, as the
+  script already did for `styles.xml`. Reported in #1
+- **Saving the session history completes before the bot says so.**
+  `saveSession()` in `src/session.ts` also called `Bun.write` without `await`:
+  "Session saved" was logged before the write finished, and a failed write
+  escaped the surrounding `try/catch` as an unhandled rejection instead of the
+  intended warning. It now uses `writeFileSync`, so a failure reaches the
+  existing warning
+
 ## [1.5.7] - 2026-10-30: The bot runs the installed Claude CLI
 
 The bot located the installed `claude` binary at startup and then never used it.
@@ -493,7 +518,8 @@ unrestricted agent, and `docs/security-limitations.md` says where they stop.
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses,
   multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.7...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.8...HEAD
+[1.5.8]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.7...v1.5.8
 [1.5.7]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.6...v1.5.7
 [1.5.6]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.5...v1.5.6
 [1.5.5]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.4...v1.5.5
