@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.9] - 2026-11-24: Bot sessions no longer receive the account's claude.ai connectors
+
+One security fix, dependency updates within their declared ranges, and a note in
+`AGENTS.md`. No configuration changes. A deployment picks up the fix on the next
+restart, after `bun install`. The Bible tools are unaffected, since they come from
+`mcp-config.ts`; an installation that reached other tools through a claude.ai
+connector loses them, and MCP servers it needs belong in `mcp-config.ts` or in the
+user or project settings.
+
+### Security
+
+- **Bot sessions no longer receive the account's claude.ai connectors.** The Claude
+  CLI attaches the connectors configured on the claude.ai account (Gmail, Google
+  Drive, Calendar and any others) to every Agent SDK session. Under
+  `bypassPermissions` the agent could call them without a prompt, triggered by a
+  Telegram message, and in a group that means by any allowed member. The session
+  now passes `settings: { disableClaudeAiConnectors: true }`. A `true` from any
+  settings source wins, so no `settings.json` can switch the connectors back on.
+  Measured with `mcpServerStatus()` ten seconds after the start of an SDK session
+  on 0.3.331 and Claude CLI 2.1.325, three runs each: seven `claude.ai` servers
+  without the setting (four connected, three awaiting authentication), none with
+  it. The init message alone is not a reliable check, because the connectors load
+  asynchronously and were missing from it in four of eight runs without the
+  setting. `SECURITY.md` now says which MCP servers a session can reach. Ported
+  from [cc-telegram-bot v1.4.1](https://github.com/fidpa/cc-telegram-bot/releases/tag/v1.4.1)
+  and upstream
+  [linuz90/claude-telegram-bot@15ef689](https://github.com/linuz90/claude-telegram-bot/commit/15ef6893fd20fb8ae4b69060bf4f4df07880f337)
+
+### Changed
+
+- **Dependencies updated within their declared ranges.**
+  `@anthropic-ai/claude-agent-sdk` 0.3.314 -> 0.3.331, `@modelcontextprotocol/sdk`
+  1.30.0 -> 1.32.2, `grammy` 1.45.1 -> 1.48.0, `zod` 4.4.3 -> 4.6.7 and
+  `@types/bun` 1.3.9 -> 1.4.5. The SDK's one breaking change in this range, hook
+  options must be arrays (0.3.327), does not affect the bot, which sets no hooks.
+  Since 0.3.330 the SDK warns with `settings_not_in_effect` when `settings` fails
+  validation, so a silently ignored `disableClaudeAiConnectors` would show up.
+  TypeScript stays on 5.9 in this release
+
+### Documentation
+
+- **`AGENTS.md` says how to write files.** A step that reads the file or reports
+  success must wait for the write: `writeFileSync` in synchronous functions,
+  `await Bun.write` in async ones, never a bare `Bun.write(...)`. This is the rule
+  behind the three fixes in 1.5.8
+
 ## [1.5.8] - 2026-11-01: Files are on disk before the next step reads them
 
 Three writes started without waiting for the file to be complete. Two of them fed
@@ -518,7 +564,8 @@ unrestricted agent, and `docs/security-limitations.md` says where they stop.
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses,
   multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.8...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.9...HEAD
+[1.5.9]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.8...v1.5.9
 [1.5.8]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.7...v1.5.8
 [1.5.7]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.6...v1.5.7
 [1.5.6]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.5...v1.5.6

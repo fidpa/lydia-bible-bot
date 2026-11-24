@@ -50,6 +50,8 @@ This is intentional. The bot is designed for personal use from mobile, where con
 
 **This is not configurable** - the bot always runs in bypass mode. If you need permission prompts, use Claude Code directly instead.
 
+Because every tool runs without a prompt, the set of MCP servers a session can reach matters. The bot passes `settings: { disableClaudeAiConnectors: true }`, so the connectors configured on the claude.ai account (Gmail, Google Drive, Calendar and others) are not attached to its sessions. Only the servers in `mcp-config.ts` and in the user and project settings remain. A `true` from any settings source wins, so no `settings.json` can switch the connectors back on.
+
 ## Threat Model
 
 The bot is designed for **personal use by trusted users**. The primary threats we defend against:

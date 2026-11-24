@@ -228,6 +228,11 @@ class ClaudeSession {
       allowDangerouslySkipPermissions: true,
       systemPrompt: SAFETY_PROMPT,
       mcpServers: MCP_SERVERS,
+      // The Claude CLI attaches the account's claude.ai connectors (Gmail,
+      // Drive, Calendar, ...) to every SDK session. Under bypassPermissions any
+      // group member could make the agent call them. A true from any settings
+      // source wins, so no settings.json can switch them back on.
+      settings: { disableClaudeAiConnectors: true },
       // Empty by default. The rationale, and when to fill it, is documented at
       // DISALLOWED_TOOLS in src/config.ts.
       disallowedTools: DISALLOWED_TOOLS,

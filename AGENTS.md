@@ -199,6 +199,8 @@ because one server serves both the German wording and the original-language text
 `mcp-config.ts` or adding a second Bible server leaves the lines intact. Calls without a
 usable reference fall back to the ref-less variant.
 
+**Writing files**: When the next step reads the file or reports success, the write must be finished first. Use `writeFileSync` in synchronous functions and `await Bun.write` in async ones, never a bare `Bun.write(...)`: it returns a promise, so a following `Bun.spawnSync` can read an incomplete file, and a failed write escapes the surrounding `try/catch` (fixed in 1.5.8, see #1).
+
 **Type checking**: Run `bun run typecheck` periodically while editing TypeScript files. Fix any type errors before committing.
 
 **After code changes**: Restart the bot so changes can be tested (`bun run start`).
