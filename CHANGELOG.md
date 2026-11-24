@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.10] - 2026-11-24: The type check runs on TypeScript 7
+
+A development-tooling release. A running bot does not change, and there are no
+configuration changes.
+
+### Changed
+
+- **The type check runs on TypeScript 7.** `typescript` moves from 5.9.3 to
+  `^7.0.2`, the native compiler, and from `peerDependencies` to `devDependencies`.
+  TypeScript 7 ships its compiler as one native package per platform, and
+  `bun.lock` now pins all of them, including the Linux x64 build the CI installs
+  with `--frozen-lockfile`. Bun runs the `.ts` sources
+  itself, so a running bot does not change. `tsconfig.json` gains
+  `"types": ["bun"]`, because TypeScript 7 defaults `types` to an empty list:
+  without the entry the check reports 52 errors, 43 of them TS2868 for the
+  unknown `Bun` global, with it none, and a deliberate type error is still
+  reported. Measured on the same machine: 0.31 s per check instead of 1.10 to
+  1.26 s with TypeScript 5.9.3. TypeScript 7.0 ships without the language service
+  API, so an editor set to the workspace TypeScript version needs TypeScript 7
+  support (in VS Code, the TypeScript 7 extension). The README badge and stack
+  table say TypeScript 7
+
 ## [1.5.9] - 2026-11-24: Bot sessions no longer receive the account's claude.ai connectors
 
 One security fix, dependency updates within their declared ranges, and a note in
@@ -564,7 +586,8 @@ unrestricted agent, and `docs/security-limitations.md` says where they stop.
 - Core architecture: Grammy Telegram bot, Claude Agent SDK integration, streaming responses,
   multi-modal input (text, voice, photo, document, video), MCP support
 
-[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.9...HEAD
+[Unreleased]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.10...HEAD
+[1.5.10]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.9...v1.5.10
 [1.5.9]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.8...v1.5.9
 [1.5.8]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.7...v1.5.8
 [1.5.7]: https://github.com/fidpa/lydia-bible-bot/compare/v1.5.6...v1.5.7

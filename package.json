@@ -10,10 +10,8 @@
     "export-chat": "bun run scripts/export-chat.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.9.3"
+    "@types/bun": "latest",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.331",

@@ -7,6 +7,8 @@
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
+    // TypeScript 7 defaults "types" to []; without this, Bun's globals are unknown.
+    "types": ["bun"],
 
     // Bundler mode
     "moduleResolution": "bundler",

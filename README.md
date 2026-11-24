@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/fidpa/lydia-bible-bot)](https://github.com/fidpa/lydia-bible-bot/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.0%2B-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Bun](https://img.shields.io/badge/Bun-1.1%2B-black?logo=bun)](https://bun.sh/)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)](https://bun.sh/)
 [![Maintenance](https://img.shields.io/badge/Maintained-yes-brightgreen.svg)](https://github.com/fidpa/lydia-bible-bot/commits/)
@@ -217,7 +217,7 @@ Telegram -> grammY handler -> Auth check -> Group filter -> Rate limit
 | Component | Technology |
 |-----------|-----------|
 | Runtime | [Bun](https://bun.sh/) |
-| Language | TypeScript 5 (strict mode) |
+| Language | TypeScript 7 (strict mode) |
 | AI Backend | [Claude Agent SDK](https://docs.anthropic.com/en/docs/build-with-claude/agent-sdk) |
 | Voice Transcription | [whisper.cpp](https://github.com/ggerganov/whisper.cpp) (local, GGML model) |
 | Telegram Library | [grammY](https://grammy.dev/) |
